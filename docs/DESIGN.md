@@ -82,8 +82,26 @@ color E-Ink:
 - **Grayscale E-Ink (Carta-class) gives fast partial refresh** (~300-450 ms,
   no full-panel flash needed for small UI changes) and zero draw between
   refreshes — the right fit for both the clock face and the status icon
-  during use. A round 1.1" option already exists off the shelf (E Ink
-  Mobius, 240×240, 4 grey levels, marketed specifically for watch faces).
+  during use.
+
+**Final panel pick: `ET013TT1` (E Ink, via Unisystem) — square, not round
+(2026-11-11).** The round 1.1" panel named above as "already existing
+off the shelf" (E Ink Mobius / Unisystem `ET011TT6`) turned out to be
+**EOL at the manufacturer**, with no round grayscale equivalent sourceable
+outside a B2B custom quote (SEEKINK and IDS Display both require a
+project-based quote for round panels, not a stock buy). Checked and ruled
+out as a workaround: round LCD modules (GC9A01-driven, widely available)
+exist, but give up the whole point of E-Ink here — near-zero standby
+power and sunlight readability — so staying on E-Ink and accepting a
+square face was the better trade.
+- `ET013TT1`: 1.3", 256×256, 2 grey levels, SPI. Active area 23.30×23.30 mm,
+  outline 27.1×28.4×0.4 mm.
+- **UX consequence, turned into a feature, not just absorbed as a
+  compromise:** a square face reads as a screen, not a watch dial — so
+  the face leans into a small animated character (Tamagotchi-style)
+  that shows the time at rest and animates while listening/speaking,
+  rather than an analog/digital clock trying to look round inside a
+  square window. Detail to flesh out in the software/UX topic.
 
 ## MCU — decided
 
@@ -132,10 +150,15 @@ microphone input per the project's own README.
 **Speaker: small dynamic speaker driven by an I2S DAC/amp (Class D), not a
 piezo buzzer.** A piezo can beep but can't carry intelligible TTS speech.
 
-**Reserve (2026-11-09): speaker size left open.** Same volumetric trade-off
-as the battery — bigger speaker/better sound vs. less room left inside the
-case. Lord will decide it once a 3D model of the enclosure makes the
-available space visible, rather than guessing now.
+**Final picks (2026-11-11):**
+- **Microphone:** `ICS-43434` (TDK InvenSense, I2S MEMS) — replaces the
+  originally-named INMP441, which DigiKey confirms is obsolete; this is
+  their own listed replacement. 3.50×2.65×0.98 mm SMD package.
+- **Speaker:** `CDS-20144` (Same Sky/CUI). Correction on shape: not round
+  — it's an **oval frame, 20×14×3.2 mm**, 1 W, 4 Ω. The front-face layout
+  (grille/port only, driver relocated to the back cavity, see the bug
+  fix in the enclosure section) needs to account for this footprint, not
+  a round one.
 
 ## Enclosure — decided (2026-11-09)
 
@@ -266,11 +289,13 @@ Two distinct, loosely-coupled layers:
 the GPLv3 reflash requirement and the remixable shells: the battery and
 the screen must both be user-replaceable without soldering.
 
-- **Battery:** connector-based (JST-SH or JST-PH, standardising on one),
-  not soldered wires. This is already how most retail Li-Po cells ship —
-  not an extra constraint, just a default to lock in. Requires a
-  removable access hatch/screwed panel in the shell (no glue, no
-  ultrasonic welding).
+- **Battery:** connector-based, **JST-PH (2.0 mm pitch)** — not JST-SH.
+  Correction (2026-11-11): JST-SH is the norm on sub-1 mm-thick cells, but
+  every real 300-350 mAh Li-Po found in sourcing (EEMB, LaskaKit) ships on
+  JST-PH; standardising on what's actually available beats an abstract
+  pick. Not soldered wires either way — already how most retail Li-Po
+  cells ship. Requires a removable access hatch/screwed panel in the
+  shell (no glue, no ultrasonic welding).
 - **Screen:** connects via FPC flex cable + ZIF connector (how small
   e-ink/e-reader panels normally attach) instead of a glued/soldered
   chip-on-flex module — also close to free once that connector type is
@@ -292,33 +317,26 @@ the screen must both be user-replaceable without soldering.
   the ornate metal look. USB-C remains the universal baseline on every
   shell; Qi is an add-on for whoever wants it on a plastic build.
 
-## Open — nothing gets coded until these are settled
+## Components — final BOM, fixed (2026-11-11)
 
-- **Volumetric budget — reference numbers for the 3D model, not a final
-  decision (2026-11-09):**
-  - ESP32-S3-WROOM-1-N16R8: 18 × 25.5 mm footprint, 3.1 mm thick. Fixed.
-  - E-Ink Mobius display: ~32-35 mm outer flex footprint, 27.96 mm active
-    round diameter, 0.5 mm panel (+ a cover lens, still TBD). Fixed panel.
-  - MEMS mic: ~3.5×2.65×1 mm package — negligible volume regardless of
-    exact part.
-  - Speaker: 10-18 mm diameter, ~3-3.5 mm thick for wearable-grade micro
-    speakers — range, size reserved for after the 3D model.
-  - USB-C receptacle: ~8.5 mm wide × ~2.5-3 mm tall × ~6-7 mm deep, sits
-    at the rim.
-  - 4 tactile buttons + charge IC + fuel-gauge IC: a few mm each,
-    negligible thickness.
-  - Battery: thickness from <1 mm (small capacity) to ~6-7 mm+ (bigger
-    capacity) for Li-Po pouch cells — reserved, decided last.
-  - Custom round PCB (not a rectangular dev board): ~1-1.2 mm thick.
-  - Shell wall: ~1.5-2 mm per side (plastic) or ~1 mm (metal).
-  - **Sanity check:** stacking everything vertically would run
-    ~13 mm (PCB + module + battery + walls + display), already inside the
-    45-55 mm / 12-18 mm pocket-watch-style envelope. Laid out side-by-side
-    on the PCB instead of stacked, the real minimum is closer to the
-    tallest single part (module or speaker, ~3-3.5 mm) + PCB + walls —
-    meaning there's real slack, not a tight squeeze, for picking a decent
-    battery and speaker once arranged in CAD.
-- **Battery capacity/size:** decided deliberately last among the electronics
-  (2026-11-09) — it depends on the power draw and the leftover internal
-  volume once everything else (MCU ✓, BLE ✓, display ✓, mic ✓, speaker type
-  ✓ but size ⬜) is fixed.
+Every part below is a confirmed, sourceable reference, not a placeholder —
+the next 3D modeling pass models the enclosure around these real
+footprints instead of guessed boxes.
+
+| Part | Ref | Footprint | Notes |
+|---|---|---|---|
+| MCU module | `ESP32-S3-WROOM-1-N16R8` | 18 × 25.5 × 3.1 mm | PCB antenna variant (not `-1U`). LCSC C2913202 (4.6€), DigiKey (6€). |
+| Display | `ET013TT1` (E Ink, via Unisystem) | outline 27.1×28.4×0.4 mm, active 23.30×23.30 mm | Square, 256×256, 2 grey levels, SPI. Quote-based order. |
+| Microphone | `ICS-43434` (TDK InvenSense) | 3.50×2.65×0.98 mm | I2S MEMS. DigiKey 3.48€. |
+| Speaker | `CDS-20144` (Same Sky/CUI) | oval 20×14×3.2 mm | 1 W, 4 Ω. Driver lives in the back cavity; front face carries only a small acoustic port (bug found/fixed 2026-11-11, previous round-pocket placeholder overflowed the shell wall). DigiKey 4.33€. |
+| Battery | `LP702030` / EEMB 350 mAh | 30 × 20 × 7 mm, JST-PH (2.0 mm) | 3.7 V Li-Po. Amazon (10.99€). Est. life: ~6 d connected-idle, ~4-5 d at 1-2 uses/h, ~2 h continuous non-stop use — estimated from the power budget, not measured. |
+| Charge IC | `TP4056` | SOIC-8 | LCSC C382139 (0.11€/unit at qty 5). |
+| Fuel gauge | `MAX17048G+T10` | — | DigiKey 4.09€. |
+| USB-C receptacle | not picked | ~8.5 × 2.5-3 × 6-7 mm (mid-mount, generic) | Still open — exact part depends on final connector orientation in the custom PCB outline. |
+| Custom PCB | — | ~1-1.2 mm thick, outline TBD | No longer constrained to round/rectangular — shaped around the battery/speaker/PCB layout once modeled (PCBWay and similar prototype houses fab any outline at no real premium). |
+
+**Suppliers, consolidated on purpose:** LCSC (MCU, charge IC) + DigiKey
+(mic, speaker, fuel gauge) as the two main hubs; Amazon only for the
+battery (neither LCSC nor DigiKey/Mouser had a matching cell shippable to
+France at this capacity/connector).
+
