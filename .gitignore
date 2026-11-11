@@ -1,0 +1,7 @@
+# Rien de stack-spécifique encore (MCU/toolchain non tranchés). Juste le bruit courant.
+
+.DS_Store
+*.swp
+__pycache__/
+*.pyc
+.vscode/

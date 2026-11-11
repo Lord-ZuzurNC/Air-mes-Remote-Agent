@@ -1,0 +1,18 @@
+name: Notify Discord Ara
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Lord-ZuzurNC/discord-commit-webhook@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          repo_format: '📂 {repo}'
+          title_format: '⚡ {count} new {commits} on {branch}'
+          commit_format: '🔧 {sha} {subject} — {author}'
+          footer_format: '🌳 {branch} · {pusher}'
+          more_format: '➕ {count} more {commits}'
