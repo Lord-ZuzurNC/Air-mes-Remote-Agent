@@ -69,12 +69,26 @@ pcb_post_d_hole = 1.7;
 
 /* [Closure screws] */
 closure_angles = [70, 110, 225, 315];
-closure_r = 24;
+closure_r = 24;   // Back to the original position (Lord, 2026-11-12) —
+                   // moving it inward broke alignment with other internal
+                   // features and ate into their space. The real fix for
+                   // the back's fillet collision is to clip the boss to
+                   // the actual curved exterior shape (see back_shell()),
+                   // not to relocate the screws.
 closure_boss_d = 8.4;
-closure_pilot_d = 1.7;   // example for M2 self-tapping: validate against screw
 closure_clear_d = 2.45;
 head_counterbore_d = 4.3;
 head_counterbore_depth = 1.5;
+// Heat-set insert (M2, "short" style): ~3.2mm pilot hole, ~3.5mm body OD,
+// 3-5mm length. Reference: insertguide.com M2 dimensions (checked
+// 2026-11-12), Prusa/CNC-Kitchen "short" M2 inserts. Not a specific
+// supplier datasheet yet — confirm against the exact insert you buy
+// before cutting real parts.
+insert_hole_d = 3.2;
+insert_depth = 4.0;         // blind, from the front's INNER face
+closure_pad_h = 6.0;        // back-side local reinforcement, true outer
+                             // surface (z=0) up to this height, backs the
+                             // head counterbore + the shaft clearance hole
 
 /* [Buttons] */
 button_angles = [-26, 26, 154, 206];
@@ -194,8 +208,11 @@ module back_shell() {
         union() {
             difference() { exterior_back(); back_void(); }
             for (a=closure_angles)
-                at_polar(closure_r,a,wall)
-                    cylinder(d=closure_boss_d,h=back_h-wall);
+                intersection() {
+                    at_polar(closure_r,a,-eps)
+                        cylinder(d=closure_boss_d,h=closure_pad_h+eps);
+                    exterior_back();
+                }
             PCB_posts();
             battery_fence();
             speaker_fence();
@@ -205,10 +222,18 @@ module back_shell() {
                 at_polar(27.5,a,back_h-2.0)
                     cylinder(d=2.5,h=3.2);
         }
-        // Blind main pilots: leave bottom intact.
-        for (a=closure_angles)
-            at_polar(closure_r,a,back_h-7.5)
-                cylinder(d=closure_pilot_d,h=8);
+        // Main closure: shaft clearance straight through + head recess on
+        // the OUTSIDE (bottom face, hidden against a surface/wrist/pocket).
+        // Thread lives in the front's heat-set insert, not here — see
+        // front_shell() for the matching blind pilot. Flipped 2026-11-12
+        // (Lord): screw heads were on the display face before, which
+        // looked wrong and needed support material on top of that.
+        for (a=closure_angles) {
+            at_polar(closure_r,a,-2*eps)
+                cylinder(d=closure_clear_d,h=back_h+4*eps);
+            at_polar(closure_r,a,-eps)
+                cylinder(d=head_counterbore_d,h=head_counterbore_depth+eps);
+        }
         // Side exits for plunger shafts; switches live on the PCB perimeter.
         for (a=button_angles)
             rotate([0,0,a])
@@ -257,13 +282,14 @@ module front_shell() {
                 round_rect(window_size,window_size,0.8);
         // Mic: dedicated front-facing bore, opposite the rear speaker cavity.
         translate([0,20,-eps]) cylinder(d=1.5,h=front_h+2*eps);
-        // Main closure: clearance shaft and recess for a low-profile head.
-        for (a=closure_angles) {
+        // Main closure: blind pilot for an M2 heat-set insert, pressed in
+        // from the inside (this face) after printing. No screw hole or
+        // head visible on the display face anymore — the screw now
+        // threads in from the back. See back_shell() for the matching
+        // through-hole + head recess.
+        for (a=closure_angles)
             at_polar(closure_r,a,-eps)
-                cylinder(d=closure_clear_d,h=front_h+2*eps);
-            at_polar(closure_r,a,front_h-head_counterbore_depth)
-                cylinder(d=head_counterbore_d,h=head_counterbore_depth+eps);
-        }
+                cylinder(d=insert_hole_d,h=insert_depth+eps);
         // Three female locating holes for the rear-shell pegs.
         for (a=[0,90,180])
             at_polar(27.5,a,-eps)

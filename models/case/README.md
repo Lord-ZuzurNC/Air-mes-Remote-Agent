@@ -30,7 +30,9 @@ choices; it changes how they're arranged.
 - Shell footprint **Ø60mm × 22mm**, excluding buttons. The original was
   21mm thick.
 - Rear half-shell: 16mm, front half-shell: 6mm.
-- Flat mid-seam + three centering pins, four closure screws from the front.
+- Flat mid-seam + three centering pins, four closure screws threaded from
+  the **back** into M2 heat-set inserts pressed into the front (no screw
+  head on the display face — flipped 2026-11-12, see `ARA_shell_v05.scad`).
 - `ET013TT1` screen (27.1 × 28.4 × 0.4mm) inserted from the inside and held
   by a separate part, no permanent gluing.
 - `LP702030` battery (study envelope 32 × 20.5 × 7.3mm) at the bottom: short
@@ -57,8 +59,10 @@ choices; it changes how they're arranged.
 5. Install the E-Ink screen from the inside of the front face, connect the
    FPC ribbon carefully, position the retaining frame with light pressure
    on the **inactive border**.
-6. Present the front face on the three pins and screw the four closure
-   points.
+6. Press the 4 M2 heat-set inserts into the front's bosses (soldering iron
+   or dedicated tip — melt-in, don't force it in cold).
+7. Present the front face on the three pins and thread the four closure
+   screws in from the back.
 
 ## To validate before a working electronic prototype
 
@@ -68,8 +72,12 @@ choices; it changes how they're arranged.
   components and the FPC connector need to be designed in electronic CAD
   and carried over to the mechanical model. A v0.1 floorplan now exists in
   `models/pcb/` (placement only, no schematic/routing yet) — see
-  `models/pcb/README.md`, including an open conflict between the
-  closure-screw clearance holes and the PCB outline that isn't resolved yet.
+  `models/pcb/README.md`. The PCB/closure-screw clearance conflict is now
+  resolved: the board outline has 4 edge notches at the closure positions.
+- **Screws**: M2 heat-set inserts chosen (front side) over self-tapping
+  pilots — confirm the exact insert part before cutting real parts, the
+  current `insert_hole_d`/`insert_depth` are reference values (insertguide.com
+  M2 "short" dimensions), not a datasheet match.
 - **ESP32-S3 antenna**: its RF clearance zone and the placement of the
   speaker/battery metal are mandatory checks; the PCB disc shown doesn't
   include the copper keep-out yet and the module hasn't been repositioned
@@ -81,8 +89,6 @@ choices; it changes how they're arranged.
 - **E-Ink screen**: full FPC ribbon drawings, active face, allowed bend
   radius, optional protective glass clearance, and a non-damaging
   retention method. The current proposal isn't sealed against water/dust.
-- **Screws**: choose the screws and check real pilot bores for the
-  material; the M2 nominal values used are illustrative.
 
 **Recommended tests**
 

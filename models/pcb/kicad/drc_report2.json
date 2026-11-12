@@ -1,0 +1,333 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-12T22:59:49",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.6",
+    "schematic_parity": [],
+    "source": "kicad.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Violation d'isolation du contour du CI (configuration des contraintes du contour du PCB isolation 0,5000 mm; réel 0,2776 mm)",
+            "items": [
+                {
+                    "description": "Segment sur Edge.Cuts",
+                    "pos": {
+                        "x": -1.7005,
+                        "y": -25.9443
+                    },
+                    "uuid": "6d8e3e4b-a250-569a-9472-29947f0d602b"
+                },
+                {
+                    "description": "Pad 1 [<no net>] de J1 sur F.Cu",
+                    "pos": {
+                        "x": -3.87,
+                        "y": -25.0
+                    },
+                    "uuid": "078ed64c-82ac-51b9-b2b0-5350f1369e70"
+                }
+            ],
+            "severity": "error",
+            "type": "copper_edge_clearance"
+        },
+        {
+            "description": "Violation d'isolation du contour du CI (configuration des contraintes du contour du PCB isolation 0,5000 mm; réel 0,2954 mm)",
+            "items": [
+                {
+                    "description": "Segment sur Edge.Cuts",
+                    "pos": {
+                        "x": 6.7293,
+                        "y": -25.1141
+                    },
+                    "uuid": "4d9fdce8-0deb-541f-a997-6b3b4e93fc54"
+                },
+                {
+                    "description": "Pad 2 [<no net>] de J1 sur F.Cu",
+                    "pos": {
+                        "x": 3.87,
+                        "y": -25.0
+                    },
+                    "uuid": "acb5cacf-befe-5a72-8070-b670ef0f0973"
+                }
+            ],
+            "severity": "error",
+            "type": "copper_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Segment sur Edge.Cuts",
+                    "pos": {
+                        "x": -11.8943,
+                        "y": 19.1005
+                    },
+                    "uuid": "8ed46e50-58ef-592a-a14b-a87b22e18e94"
+                },
+                {
+                    "description": "Rectangle de U1 sur F.Silkscreen",
+                    "pos": {
+                        "x": -12.75,
+                        "y": 1.0
+                    },
+                    "uuid": "c2fbff28-d418-583d-ac09-2fb6bb4d6728"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Segment sur Edge.Cuts",
+                    "pos": {
+                        "x": 4.6544,
+                        "y": -25.58
+                    },
+                    "uuid": "abb11112-cfa6-535f-ad70-e7760a7f4f43"
+                },
+                {
+                    "description": "Rectangle de J1 sur F.Silkscreen",
+                    "pos": {
+                        "x": -4.47,
+                        "y": -28.4
+                    },
+                    "uuid": "6fc42c06-f91f-512f-9d5f-9ded4cc1602d"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Segment sur Edge.Cuts",
+                    "pos": {
+                        "x": -12.5169,
+                        "y": -14.59
+                    },
+                    "uuid": "21d11f3b-fc85-5df3-ae6b-a40bc849a810"
+                },
+                {
+                    "description": "Champ référence de U3",
+                    "pos": {
+                        "x": -14.0,
+                        "y": -13.5
+                    },
+                    "uuid": "9773e2f7-8dd9-50ad-9aad-f9994dc95867"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Segment sur Edge.Cuts",
+                    "pos": {
+                        "x": -15.5046,
+                        "y": -12.138
+                    },
+                    "uuid": "1b7594bf-1ecf-5772-a9e0-9e6bc242c82a"
+                },
+                {
+                    "description": "Rectangle de U3 sur F.Silkscreen",
+                    "pos": {
+                        "x": -16.5,
+                        "y": -12.0
+                    },
+                    "uuid": "67d9d1d9-53ab-536c-a5cd-4f2ffacbb487"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Segment sur Edge.Cuts",
+                    "pos": {
+                        "x": 15.8238,
+                        "y": -12.0525
+                    },
+                    "uuid": "61f07b36-a0b9-5905-a82f-868a1d66835a"
+                },
+                {
+                    "description": "Champ référence de U4",
+                    "pos": {
+                        "x": 14.0,
+                        "y": -13.0
+                    },
+                    "uuid": "4f978e14-68cb-5f54-b142-0765f0c64781"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte U1",
+                    "pos": {
+                        "x": 0.0,
+                        "y": 10.0
+                    },
+                    "uuid": "4ed00365-127e-5a12-8f99-b415abc33f4a"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte J1",
+                    "pos": {
+                        "x": 0.0,
+                        "y": -25.0
+                    },
+                    "uuid": "6030c16a-fe4e-5782-8ea4-607ecabd3abf"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte U2",
+                    "pos": {
+                        "x": 0.0,
+                        "y": 21.0
+                    },
+                    "uuid": "6cc978f3-02a9-5bec-abc5-5693da927277"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte U3",
+                    "pos": {
+                        "x": -14.0,
+                        "y": -10.0
+                    },
+                    "uuid": "b0dd7c6c-5b95-5bf1-8617-0e872a235530"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte U4",
+                    "pos": {
+                        "x": 14.0,
+                        "y": -10.0
+                    },
+                    "uuid": "40ad3535-5631-5fcf-912d-ca22ba808477"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte <pas de référence schématique>",
+                    "pos": {
+                        "x": -19.0,
+                        "y": -1.0
+                    },
+                    "uuid": "03050321-fe79-5b35-b032-b7fa01a83e25"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte <pas de référence schématique>",
+                    "pos": {
+                        "x": 19.0,
+                        "y": -1.0
+                    },
+                    "uuid": "82beab48-3560-584e-8cfa-5b51e3afae99"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte <pas de référence schématique>",
+                    "pos": {
+                        "x": -19.0,
+                        "y": 13.0
+                    },
+                    "uuid": "c68a79ba-588e-5dcb-8f03-75591461246f"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'",
+            "items": [
+                {
+                    "description": "Empreinte <pas de référence schématique>",
+                    "pos": {
+                        "x": 19.0,
+                        "y": 13.0
+                    },
+                    "uuid": "541b79e9-3e9e-520f-8e72-7eb4d71a4db9"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        }
+    ]
+}

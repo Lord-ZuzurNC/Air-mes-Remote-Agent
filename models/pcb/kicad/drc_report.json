@@ -1,0 +1,73 @@
+** Drc report for kicad.kicad_pcb **
+** Created on 2026-11-12T22:59:35 **
+** Report includes: Errors, Warnings **
+
+** Found 16 DRC violations **
+[copper_edge_clearance]: Violation d'isolation du contour du CI (configuration des contraintes du contour du PCB isolation 0,5000 mm; réel 0,2776 mm)
+    Rule: configuration des contraintes du contour du PCB; error
+    @(-1.7005 mm, -25.9443 mm): Segment sur Edge.Cuts
+    @(-3.8700 mm, -25.0000 mm): Pad 1 [<no net>] de J1 sur F.Cu
+[copper_edge_clearance]: Violation d'isolation du contour du CI (configuration des contraintes du contour du PCB isolation 0,5000 mm; réel 0,2954 mm)
+    Rule: configuration des contraintes du contour du PCB; error
+    @(6.7293 mm, -25.1141 mm): Segment sur Edge.Cuts
+    @(3.8700 mm, -25.0000 mm): Pad 2 [<no net>] de J1 sur F.Cu
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(-11.8943 mm, 19.1005 mm): Segment sur Edge.Cuts
+    @(-12.7500 mm, 1.0000 mm): Rectangle de U1 sur F.Silkscreen
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(4.6544 mm, -25.5800 mm): Segment sur Edge.Cuts
+    @(-4.4700 mm, -28.4000 mm): Rectangle de J1 sur F.Silkscreen
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(-12.5169 mm, -14.5900 mm): Segment sur Edge.Cuts
+    @(-14.0000 mm, -13.5000 mm): Champ référence de U3
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(-15.5046 mm, -12.1380 mm): Segment sur Edge.Cuts
+    @(-16.5000 mm, -12.0000 mm): Rectangle de U3 sur F.Silkscreen
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(15.8238 mm, -12.0525 mm): Segment sur Edge.Cuts
+    @(14.0000 mm, -13.0000 mm): Champ référence de U4
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(0.0000 mm, 10.0000 mm): Empreinte U1
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(0.0000 mm, -25.0000 mm): Empreinte J1
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(0.0000 mm, 21.0000 mm): Empreinte U2
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(-14.0000 mm, -10.0000 mm): Empreinte U3
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(14.0000 mm, -10.0000 mm): Empreinte U4
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(-19.0000 mm, -1.0000 mm): Empreinte <pas de référence schématique>
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(19.0000 mm, -1.0000 mm): Empreinte <pas de référence schématique>
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(-19.0000 mm, 13.0000 mm): Empreinte <pas de référence schématique>
+[lib_footprint_issues]: La configuration actuelle n'inclut pas la librairie d'empreintes 'ARA'
+    Local override; warning
+    @(19.0000 mm, 13.0000 mm): Empreinte <pas de référence schématique>
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

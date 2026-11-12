@@ -22,11 +22,13 @@ warnings for the USB-C connector.
 No schematic, no netlist, no routing yet — footprints are self-contained
 placeholders (silhouette + 2 dummy pads), not verified library parts.
 
-**Open issue found while building this file:** the case model's closure-screw
-clearance holes (4×, Ø10.1mm at r=24mm) reach ~29mm from center — past both
-the 26mm PCB radius and the 28mm cavity wall. The board outline currently
-drawn is a plain circle; it needs edge notches at those 4 points, or the
-closure-screw geometry needs revisiting. Not decided yet.
+**Open issue found while building this file — now resolved:** the case
+model's closure-screw clearance holes (4×, Ø10.1mm at r=24mm) reached
+~29mm from center — past both the 26mm PCB radius and the 28mm cavity
+wall. Fixed by cutting 4 matching edge notches into the board outline
+(computed with shapely: circle minus 4 clearance circles, re-exported as
+an Edge.Cuts polygon) instead of leaving a plain circle. Decided by Lord,
+2026-11-12.
 
 ## Contents
 
