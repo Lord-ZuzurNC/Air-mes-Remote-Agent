@@ -371,10 +371,37 @@ module back_assembly() {
     }
 }
 
+// --- Print-ready orientations ---
+// front_shell(): as modelled, z=0 is the flat mating face and z=front_h
+// is the rounded outward/display face. Printed as-is (mating face down
+// on the bed), the display ledge floats over the recess cut from the
+// mating side — needs support everywhere under that ledge. Flipped so
+// the (mostly flat, only rim-rounded) outward face sits on the bed
+// instead, the recess opens upward into air — nothing to support.
+// rotate([180,0,0]) is a rigid rotation (determinant +1), not a
+// mirror() — it does not flip the part into its own mirror image, it
+// only reorients which face is down. Lord caught this 2026-11-12: the
+// original export would have printed with tons of needless support.
+module front_shell_print() {
+    translate([0, 0, front_h]) rotate([180, 0, 0]) front_shell();
+}
+
+// button_plunger(): built with its insertion axis along local X (it's
+// designed to slide into the shell wall horizontally) — printed as-is,
+// that means the cylinder lies on its side on the bed, which needs
+// support for the whole first half as the diameter grows past the
+// midpoint. Standing it upright (axis along Z) prints with zero
+// support — each layer is just a constant-diameter disc.
+module button_plunger_print() {
+    rotate([0, -90, 0]) button_plunger();
+}
+
 if(part=="back") back_shell();
-else if(part=="front") front_shell();
+else if(part=="front") front_shell_print();
 else if(part=="retainer") retainer();
-else if(part=="button") for(i=[0:3]) translate([i*8,0,0]) button_plunger();
+else if(part=="button") // 2x2 square, not a single row — denser on the
+                          // bed, same spacing either way (Lord, 2026-11-12)
+    for(x=[0,8]) for(y=[0,8]) translate([x,y,0]) button_plunger_print();
 else if(part=="pcb") pcb_reference();
 else if(part=="assembled") {
     back_assembly();
@@ -386,9 +413,10 @@ else if(part=="exploded") {
 }
 else if(part=="rear_view") rotate([180,0,0]) back_shell();
 else if(part=="print") {
-    translate([-34,0,0]) front_shell();
+    translate([-34,0,0]) front_shell_print();
     translate([34,0,0]) back_shell();
     translate([0,-48,0]) retainer();
-    // 4 plungers — one per real button, not one sample to duplicate by hand
-    for(i=[0:3]) translate([-16+i*8,-69,0]) button_plunger();
+    // 4 plungers, 2x2 square, standing upright — print-ready, not the
+    // assembly orientation
+    for(x=[-4,4]) for(y=[-73,-65]) translate([x,y,0]) button_plunger_print();
 }
