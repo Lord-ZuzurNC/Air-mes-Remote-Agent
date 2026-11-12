@@ -332,7 +332,7 @@ footprints instead of guessed boxes.
 | Battery | `LP702030` / EEMB 350 mAh | 30 × 20 × 7 mm, JST-PH (2.0 mm) | 3.7 V Li-Po. Amazon (10.99€). Est. life: ~6 d connected-idle, ~4-5 d at 1-2 uses/h, ~2 h continuous non-stop use — estimated from the power budget, not measured. |
 | Charge IC | `TP4056` | SOIC-8 | LCSC C382139 (0.11€/unit at qty 5). |
 | Fuel gauge | `MAX17048G+T10` | — | DigiKey 4.09€. |
-| USB-C receptacle | not picked | ~8.5 × 2.5-3 × 6-7 mm (mid-mount, generic) | Still open — exact part depends on final connector orientation in the custom PCB outline. |
+| USB-C receptacle | `SHOU HAN TYPE-C 6P CB1.6(073)`, LCSC C2858274 | 8.94×3.16mm body, ~6.8mm deep, 6-pin (VBUS×2, GND×2, CC1, CC2) | Decided (2026-11-11): charge-only, no D+/D- — firmware OTA is BLE, so the port never needs data lines. Rated 5V/3A. |
 | Custom PCB | — | ~1-1.2 mm thick, outline TBD | No longer constrained to round/rectangular — shaped around the battery/speaker/PCB layout once modeled (PCBWay and similar prototype houses fab any outline at no real premium). |
 
 **Suppliers, consolidated on purpose:** LCSC (MCU, charge IC) + DigiKey
