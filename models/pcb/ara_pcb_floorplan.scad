@@ -75,13 +75,13 @@ mic_cx = 0; mic_cy = 21; // moved clear of the MCU footprint (was
 
 /* [Charge IC — TP4056, SOIC-8, sketch placement] */
 charge_w = 5; charge_l = 4;
-charge_cx = -18; charge_cy = -7;   // moved from -14,-10 (Lord,
-                                    // 2026-11-12): checked jointly
-                                    // against U1(cy=2), mic, the 4
-                                    // notches at r=24, and the mount
-                                    // holes — not one constraint at a
-                                    // time, that's what broke it last
-                                    // round.
+charge_cx = 0; charge_cy = -18;   // moved again (Lord, 2026-11-12): good
+                                    // instinct — TP4056 close to the
+                                    // USB-C input keeps the high-current
+                                    // charge path short. Checked clear of
+                                    // U1/U4/mic/notches/mount holes; only
+                                    // 0.6mm from the USB-C footprint and
+                                    // 7.5mm from U4.
 
 /* [Fuel gauge — MAX17048G+T10, sketch placement] */
 gauge_w = 3; gauge_l = 3;
