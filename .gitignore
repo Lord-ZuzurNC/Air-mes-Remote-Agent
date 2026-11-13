@@ -6,4 +6,5 @@ __pycache__/
 *.pyc
 .vscode/
 *.lck
+*.lock
 .history/

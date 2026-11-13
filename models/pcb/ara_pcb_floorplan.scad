@@ -38,10 +38,13 @@ mount_hole_d = 2.2;
 // circular outline let these clearance holes reach past this board's own
 // radius. Fixed with edge notches. closure_r went 24 -> 18 -> back to 24
 // (Lord, 2026-11-12): the case's real fix was clipping the boss to the
-// curved exterior, not moving the screws — moving them broke alignment
-// with other internal features and ate their space.
+// curved exterior, not moving the screws — moving them INWARD broke
+// alignment with other internal features and ate their space.
+// closure_r -> 27 (Lord, 2026-11-14): moved OUTWARD this time, to clear
+// the bigger GDEW0154M09 display by ~3.2mm instead of 1.1mm. Different
+// direction from the 2026-11-12 move, so the old warning doesn't apply.
 closure_angles = [70, 110, 225, 315];
-closure_r = 24;
+closure_r = 27;
 closure_notch_d = 10.1;  // closure_boss_d/2+0.85, radius form
 
 /* [ESP32-S3-WROOM-1-N16R8] */
