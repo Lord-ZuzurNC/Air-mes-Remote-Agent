@@ -191,7 +191,10 @@ the electronics.
 **Model family, all built on that interface:**
 - **Base model (reset 2026-11-21, now rectangular, not round):** a plain
   rectangular "pure" shell, printable in PLA/PETG — the reference anyone
-  can remix. See `models/case/README.md` for the live geometry state.
+  can remix. 90.8 × 33.8 × 12.5 mm. Orientation words (Lord, 2026-11-21):
+  the end with the two plastic hooks is the **top** (antenna end), the
+  end with the two screws is the **bottom**; USB-C on the right long
+  wall. See `models/case/README.md` for the live geometry state.
 - **Derived plastic models (examples, also PLA/PETG):** a loop for a
   carabiner + chain, a two-loop version for cords, etc. Not an exhaustive
   list — people are expected to make their own variants off the base.
@@ -325,11 +328,9 @@ the screen must both be user-replaceable without soldering.
   chosen. Caveat: an FPC-ZIF connector is more delicate than the
   battery's JST connector — solder-free, but "careful hands with a
   spudger", not "unplug like a charger".
-- **Enclosure consequence (for the 3D model, not resolved yet):** the
-  screen sits on the front face, the battery is more naturally accessed
-  from the back — two access zones, unless the shell is designed to split
-  fully in two (front face with the screen attached, main body with PCB +
-  battery). To decide visually in CAD, like the speaker/battery size.
+- **Enclosure consequence — decided (2026-11-21): full split.** The
+  bezel carries the screen and the PCB, the bottom shell is the lid with
+  the battery and speaker in it; two screws out and both are reachable.
 - **PCB split:** one soldered-once core board (ESP32-S3 module with its
   integrated BLE, USB-C, speaker, mic) + two connector-based swappable
   parts (screen, battery). Nothing else is meant to be field-replaceable.
@@ -348,27 +349,34 @@ footprints instead of guessed boxes.
 
 | Part | Ref | Footprint | Notes |
 |---|---|---|---|
-| MCU module | `ESP32-S3-WROOM-1-N16R8` | 18 × 25.5 × 3.1 mm | PCB antenna variant (not `-1U`). LCSC C2913202 (4.6€), DigiKey (6€). |
-| Display | `GDEY0213B74` (Good Display) | outline 59.2×29.2×1.0 mm, active 48.55×23.7 mm | Rectangular, 250×122, SSD1680Z, 4 grayscale, SPI, 24-pin FPC. Commodity stock, no touch/front-light. |
-| Microphone | `ICS-43434` (TDK InvenSense) | 3.50×2.65×0.98 mm | I2S MEMS. DigiKey 3.48€. |
-| Speaker | `CDS-20144` (Same Sky/CUI) | oval 20×14×3.2 mm | 1 W, 4 Ω. Driver lives in the back cavity; front face carries only a small acoustic port (bug found/fixed 2026-11-11, previous round-pocket placeholder overflowed the shell wall). DigiKey 4.33€. |
-| Battery | `LP702030` / EEMB 350 mAh | 30 × 20 × 7 mm, JST-PH (2.0 mm) | 3.7 V Li-Po. Amazon (10.99€). Est. life: ~6 d connected-idle, ~4-5 d at 1-2 uses/h, ~2 h continuous non-stop use — estimated from the power budget, not measured. |
+| MCU module | `ESP32-S3-WROOM-1-N16R8` | 18 × 25.5 × 3.1 mm | PCB antenna variant (not `-1U`). LCSC C2913202 / DigiKey 5407-ESP32-S3-WROOM-1-N16R8CT-ND — both at zero stock on 2026-11-21. |
+| Display | `GDEY0213B74` (Good Display) | outline 59.2×29.2×1.0 mm, active 48.55×23.7 mm | Rectangular, 250×122, SSD1680Z, 4 grayscale, SPI, 24-pin FPC. No touch/front-light. Bought from Good Display's own shop (buy-lcd.com); not at LCSC. From its drawing: active area 2.70 mm from the top (non-FPC) end and 7.95 mm from the FPC end, centred across; tail 12.5 mm wide, 14.3 mm long, 0.3 mm thick. |
+| Microphone | `ICS-43434` (TDK InvenSense) | 3.50×2.65×0.98 mm | I2S MEMS. DigiKey 1428-1066-1-ND. DigiKey now marks it obsolete too (2026-11-21), with 52 007 in stock: buy the prototype's from that stock; a successor is an open point for any later batch. |
+| Speaker | `CDS-20144` (Same Sky/CUI) | oval 20×14×3.2 mm | 1 W, 4 Ω, solder pads. Driver lives in the back cavity; front face carries only a small acoustic port (bug found/fixed 2026-11-11, previous round-pocket placeholder overflowed the shell wall). DigiKey 102-3542-ND. |
+| Battery | `LP702030` / EEMB 350 mAh | 30 × 20 × 7 mm nominal, JST-PH (2.0 mm) | 3.7 V Li-Po. Amazon (10.99€, ASIN B095W1XHVY). The listing reportedly gives 7.3 × 20.5 × 32 mm overall — to measure; the case reserves 2 mm at the lead end. Est. life: ~6 d connected-idle, ~4-5 d at 1-2 uses/h, ~2 h continuous non-stop use — estimated from the power budget, not measured. |
 | Charge IC | `TP4056` | SOIC-8 | LCSC C382139 (0.11€/unit at qty 5). |
-| Fuel gauge | `MAX17048G+T10` | — | DigiKey 4.09€. |
-| USB-C receptacle | `SHOU HAN TYPE-C 6P CB1.6(073)`, LCSC C2858274 | 8.94×3.16mm body, ~6.8mm deep, 6-pin (VBUS×2, GND×2, CC1, CC2) | Decided (2026-11-11): charge-only, no D+/D- — firmware OTA is BLE, so the port never needs data lines. Rated 5V/3A. |
-| Buttons | `Alps SKRTLAE010` | 4.5 × 3.4 × 1.65 mm | Side-push tactile switch, ×4, confirmed (2026-11-21). DigiKey. |
-| Audio amplifier | `MAX98357A` (Analog/Maxim), TQFN-16 package preferred over the 9-ball WLP (easier hand/reflow assembly) | 3 × 3 × 0.75 mm (TQFN) | I2S Class-D, no MCLK needed. 0.93 W into 4Ω at 3.7 V (battery voltage) — covers the `CDS-20144`'s 1 W/4Ω spec. LCSC/DigiKey. Picked 2026-11-21; placed in the case model and the PCB floorplan (2026-11-21), fits. |
-| 3.3 V regulator | `AP2112K-3.3` | SOT-23-5 | LDO, 600 mA, 250 mV dropout at full load — holds regulation through the Li-Po's discharge curve, unlike AMS1117 (needs ~1.1 V headroom, breaks below ~4.4 V in). LCSC C23380830 / DigiKey. Picked 2026-11-21; placed in the case model and the PCB floorplan (2026-11-21), fits. |
+| Fuel gauge | `MAX17048G+T10` | TDFN-8, 2 × 2 mm | LCSC C2682616 / DigiKey MAX17048G+T10CT-ND. |
+| USB-C receptacle | `SHOU HAN TYPE-C 6P(073)`, LCSC C668623 | 8.94×3.2 mm shell, 6.8 mm deep (7.15 overall), 6-pin (VBUS×2, GND×2, CC1, CC2) | Charge-only, no D+/D- (decided 2026-11-11) — firmware OTA is BLE, so the port never needs data lines. Rated 5V/3A. **Changed (2026-11-21) from `TYPE-C 6P CB1.6(073)`, C2858274:** that one is the sunk-board version of the same shell, 1.6 mm into a board cut-out; on the 1.0 mm board it comes out 0.6 mm on the display side, where there is 0.4 mm. The plain `(073)` sits on the board. On the device's right long wall. |
+| Buttons | `Alps SKRTLAE010` | 4.5 × 3.4 × 1.65 mm | Side-push tactile switch, ×4, confirmed (2026-11-21). LCSC C110293 / DigiKey 4809-SKRTLAE010CT-ND. |
+| Audio amplifier | `MAX98357AETE+T` (Analog/Maxim), 16-TQFN | 3 × 3 × 0.75 mm | I2S Class-D, no MCLK needed. 0.93 W into 4Ω at 3.7 V (battery voltage) — covers the `CDS-20144`'s 1 W/4Ω spec. **Confirmed by Lord (2026-11-21).** LCSC C910544 / DigiKey MAX98357AETE+TCT-ND. |
+| 3.3 V regulator | `AP2112K-3.3TRG1` | SOT-23-5 | LDO, 600 mA, 250 mV dropout at full load — holds regulation through the Li-Po's discharge curve, unlike AMS1117. **Confirmed by Lord (2026-11-21).** LCSC C51118 (Diodes Inc.; C23380830 is another maker's part under the same number) / DigiKey (AP2112K-3.3TRG1DITR-ND). |
 | Display boost circuit | **Correction (2026-11-21): needed after all** — see below | — | I was wrong earlier: "on-chip booster" only means the *control loop* is on-chip; the power stage (inductor, MOSFET, diodes) is external, per the GDEY0213B74 datasheet's own §12 Reference Circuit, read in full this time. |
-| — boost inductor | `L1`: 47µH, 500mA | — | Generic SMD power inductor, LCSC/DigiKey, any RoHS part meeting this spec. |
-| — boost MOSFET | `Q1`: `Si1308EDL` (Vishay), SC-70-3 | N-channel, driven by the panel's GDR pin | LCSC C7603347 / DigiKey. |
+| — boost inductor | `L1`: 47µH, 500mA — `CKCS4030-47uH/M` (Cenker) | 4 × 4 × 3 mm | Isat 0.95 A, Irms 0.72 A, DCR 0.445 Ω. LCSC C354593. |
+| — boost MOSFET | `Q1`: `Si1308EDL` (Vishay, `SI1308EDL-T1-GE3`), SC-70-3 | N-channel, driven by the panel's GDR pin | LCSC C469327 (Vishay; C7603347 is another maker's part under the same number) / DigiKey. |
 | — boost diodes ×3 | `D1/D2/D3`: `MBR0530T1G` (onsemi), SOD-123 | Schottky, 30V/500mA | LCSC C82046 / DigiKey. Use the `T1G` suffix — the bare `MBR0530` is marked obsolete at some distributors, this is the active direct substitute. |
-| — boost resistors | `R1`: 1MΩ, `R2`: 2.2Ω | 0402/0603 | Current-sense feedback for the `RESE` pin. Generic, any supplier. |
-| — boost/supply caps ×7 | `C3`: 4.7µF/25V; `C5/C6/C7/C9/C10/C12`: 1µF/25V each | 0402/0603 | Ceramic, 25V rating per the reference circuit. Generic, any supplier. |
-| Custom PCB | — | ~1-1.2 mm thick, outline TBD | No longer constrained to round/rectangular — shaped around the battery/speaker/PCB layout once modeled (PCBWay and similar prototype houses fab any outline at no real premium). |
+| — boost resistors | `R1`: 1MΩ (GDR to GND), `R2`: 2.2Ω (RESE to GND) | 0603 | Generic 1 %. LCSC C22935 (UNI-ROYAL `0603WAF1004T5E`), C112307 (Yageo `RC0603FR-072R2L`). |
+| — boost/supply caps ×10 | `C3`, `C4`: 4.7µF/25V; `C2`, `C5`, `C6`, `C7`, `C9`, `C10`, `C11`, `C12`: 1µF/25V each | 0603 | Ceramic, 25V rating per the reference circuit. **Corrected (2026-11-21): ten, not seven** — `C2` (VSH2), `C4` (input, at L1) and `C11` (VGL) are in the datasheet's drawing too; it has no C1 or C8. Samsung `CL10A475KA8NQNC` (LCSC C69335), `CL10A105KA8NNNC` (LCSC C5673). |
+| Display FPC connector | Hirose `FH12A-24S-0.5SH(55)` (top contact) or `FH12-24S-0.5SH(55)` (bottom contact) | 24-pin, 0.5 mm pitch, 2.0 mm high | Same footprint for both. Which one depends on the face of the panel's tail that carries the contacts, which the panel specification does not state: buy both, decide on the real panel. LCSC C506794 / C202112. |
+| Battery header | JST `S2B-PH-SM4-TB(LF)(SN)` | PH 2.0 mm, 2-pin, side entry, SMT | The board side of the JST-PH decision above. LCSC C295747. |
+| Case screws ×2 | B&F `MPMS 002 0008 PH` — M2 × 0.4 × 8 mm pan head Phillips machine screw | head Ø3.85 × 1.52 mm | Decided (2026-11-21). M2 over M1.6, machine screw over thread-forming: neither LCSC nor DigiKey lists a thread-forming screw for plastic in these sizes; the screw cuts its thread in a printed Ø1.7 pilot. 8 mm for 6.7 mm of engagement in the bezel post. DigiKey H739-ND. |
+| Custom PCB | — | 1.0 mm, 2 layers, 79.95 × 29.3 mm | Rectangular with one slot for the display FPC and two holes for the bezel posts. Floorplan only so far: `models/pcb/README.md`. |
 
-**Suppliers, consolidated on purpose:** LCSC (MCU, charge IC) + DigiKey
-(mic, speaker, fuel gauge) as the two main hubs; Amazon only for the
-battery (neither LCSC nor DigiKey/Mouser had a matching cell shippable to
-France at this capacity/connector).
+**Suppliers, consolidated on purpose:** LCSC first (everything it stocks
+from the original maker) + DigiKey (mic, speaker, screws) as the two main
+hubs; Amazon only for the battery (neither LCSC nor DigiKey/Mouser had a
+matching cell shippable to France at this capacity/connector); the display
+from Good Display's own shop. The order-ready list, one unit, with every
+code: `models/pcb/BOM_to_buy.md`. It also lists about twenty support
+passives (USB-C CC resistors, charge-current resistor, decoupling,
+pull-ups) that are not in the table above and wait for the schematic.
 
