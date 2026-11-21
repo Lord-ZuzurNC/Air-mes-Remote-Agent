@@ -53,7 +53,15 @@ reconnections reuse stored keys instead of re-authenticating.
 
 ## Form factor & standby display — decided
 
-**Device: round, bare, no fixed wearing mechanism** (2026-11-09). Lord will
+**Superseded (2026-11-21): shape is rectangular, not round.** Reason:
+the ESP32-S3's antenna keep-out (15 mm, see MCU section) is directional,
+not radial — a round shell has to inflate its whole diameter to satisfy
+a clearance that only matters in one direction, a rectangle only needs to
+grow on the side that needs it. Carry modes below are unchanged by this.
+Geometry reset to zero in `models/case/README.md` — no numbers from the
+round study (v0.4–v0.8, Ø58 × 12.7 mm) carry over.
+
+~~**Device: round, bare, no fixed wearing mechanism** (2026-11-09).~~ Lord will
 showcase two carry modes — pocket (fob chain) and necklace — but the
 device itself imposes neither; how people wear it is up to them.
 
@@ -84,8 +92,7 @@ color E-Ink:
   refreshes — the right fit for both the clock face and the status icon
   during use.
 
-**Final panel pick: `ET013TT1` (E Ink, via Unisystem) — square, not round
-(2026-11-11).** The round 1.1" panel named above as "already existing
+**Panel pick as of 2026-11-11: `ET013TT1` (E Ink, via Unisystem) — square, not round.** The round 1.1" panel named above as "already existing
 off the shelf" (E Ink Mobius / Unisystem `ET011TT6`) turned out to be
 **EOL at the manufacturer**, with no round grayscale equivalent sourceable
 outside a B2B custom quote (SEEKINK and IDS Display both require a
@@ -94,8 +101,20 @@ out as a workaround: round LCD modules (GC9A01-driven, widely available)
 exist, but give up the whole point of E-Ink here — near-zero standby
 power and sunlight readability — so staying on E-Ink and accepting a
 square face was the better trade.
-- `ET013TT1`: 1.3", 256×256, 2 grey levels, SPI. Active area 23.30×23.30 mm,
-  outline 27.1×28.4×0.4 mm.
+
+**Superseded, re-picked (2026-11-21):** now that the case itself is
+rectangular, not round, the square-only constraint that justified
+`ET013TT1` no longer holds. `ET013TT1` is dropped.
+
+**Final panel pick: `GDEY0213B74` (Good Display) — bare panel, no touch,
+no front-light.** Genuinely rectangular, commodity stock (not a B2B
+quote): SSD1680Z controller, 2.13", 250×122 px, SPI, 4 grayscale, 24-pin
+FPC. Active area 48.55×23.7 mm, outline 59.2×29.2×1.0 mm, partial
+refresh ~0.4 s. **Caution logged (2026-11-21):** the first link Lord sent was
+`GDEY0213B74-FT11` — a capacitive-touch + front-light variant repackaged
+as a Raspberry Pi HAT (40-pin GPIO header, its own driver board) — wrong
+part, not embeddable on a custom PCB via FPC/ZIF. Corrected to the bare
+`GDEY0213B74` before sourcing/BOM lock.
 - **UX consequence, turned into a feature, not just absorbed as a
   compromise:** a square face reads as a screen, not a watch dial — so
   the face leans into a small animated character (Tamagotchi-style)
@@ -170,8 +189,9 @@ same interface, so a new shell is a modelling exercise, not a redesign of
 the electronics.
 
 **Model family, all built on that interface:**
-- **Base model:** a plain round "pure" shell, printable in PLA/PETG —
-  the reference anyone can remix.
+- **Base model (reset 2026-11-21, now rectangular, not round):** a plain
+  rectangular "pure" shell, printable in PLA/PETG — the reference anyone
+  can remix. See `models/case/README.md` for the live geometry state.
 - **Derived plastic models (examples, also PLA/PETG):** a loop for a
   carabiner + chain, a two-loop version for cords, etc. Not an exhaustive
   list — people are expected to make their own variants off the base.
@@ -181,7 +201,10 @@ the electronics.
   lost-wax jewellery casting or metal 3D printing (DMLS/SLM, brass/bronze/
   stainless) — not the mass case manufacturers Lord first had in mind,
   which need volume to justify tooling. Hinge + latch is a modelling
-  detail, not a blocker.
+  detail, not a blocker. Note (2026-11-21): a rectangular case reads less
+  like jewellery than the round pendant did — the ornate/hunter-case line
+  loses some of its charm; Lord has accepted that trade for the antenna
+  clearance gain.
 
 ## Companion app architecture & connectivity — decided (2026-11-09)
 
@@ -326,13 +349,22 @@ footprints instead of guessed boxes.
 | Part | Ref | Footprint | Notes |
 |---|---|---|---|
 | MCU module | `ESP32-S3-WROOM-1-N16R8` | 18 × 25.5 × 3.1 mm | PCB antenna variant (not `-1U`). LCSC C2913202 (4.6€), DigiKey (6€). |
-| Display | `ET013TT1` (E Ink, via Unisystem) | outline 27.1×28.4×0.4 mm, active 23.30×23.30 mm | Square, 256×256, 2 grey levels, SPI. Quote-based order. |
+| Display | `GDEY0213B74` (Good Display) | outline 59.2×29.2×1.0 mm, active 48.55×23.7 mm | Rectangular, 250×122, SSD1680Z, 4 grayscale, SPI, 24-pin FPC. Commodity stock, no touch/front-light. |
 | Microphone | `ICS-43434` (TDK InvenSense) | 3.50×2.65×0.98 mm | I2S MEMS. DigiKey 3.48€. |
 | Speaker | `CDS-20144` (Same Sky/CUI) | oval 20×14×3.2 mm | 1 W, 4 Ω. Driver lives in the back cavity; front face carries only a small acoustic port (bug found/fixed 2026-11-11, previous round-pocket placeholder overflowed the shell wall). DigiKey 4.33€. |
 | Battery | `LP702030` / EEMB 350 mAh | 30 × 20 × 7 mm, JST-PH (2.0 mm) | 3.7 V Li-Po. Amazon (10.99€). Est. life: ~6 d connected-idle, ~4-5 d at 1-2 uses/h, ~2 h continuous non-stop use — estimated from the power budget, not measured. |
 | Charge IC | `TP4056` | SOIC-8 | LCSC C382139 (0.11€/unit at qty 5). |
 | Fuel gauge | `MAX17048G+T10` | — | DigiKey 4.09€. |
 | USB-C receptacle | `SHOU HAN TYPE-C 6P CB1.6(073)`, LCSC C2858274 | 8.94×3.16mm body, ~6.8mm deep, 6-pin (VBUS×2, GND×2, CC1, CC2) | Decided (2026-11-11): charge-only, no D+/D- — firmware OTA is BLE, so the port never needs data lines. Rated 5V/3A. |
+| Buttons | `Alps SKRTLAE010` | 4.5 × 3.4 × 1.65 mm | Side-push tactile switch, ×4, confirmed (2026-11-21). DigiKey. |
+| Audio amplifier | `MAX98357A` (Analog/Maxim), TQFN-16 package preferred over the 9-ball WLP (easier hand/reflow assembly) | 3 × 3 × 0.75 mm (TQFN) | I2S Class-D, no MCLK needed. 0.93 W into 4Ω at 3.7 V (battery voltage) — covers the `CDS-20144`'s 1 W/4Ω spec. LCSC/DigiKey. Picked 2026-11-21; placed in the case model and the PCB floorplan (2026-11-21), fits. |
+| 3.3 V regulator | `AP2112K-3.3` | SOT-23-5 | LDO, 600 mA, 250 mV dropout at full load — holds regulation through the Li-Po's discharge curve, unlike AMS1117 (needs ~1.1 V headroom, breaks below ~4.4 V in). LCSC C23380830 / DigiKey. Picked 2026-11-21; placed in the case model and the PCB floorplan (2026-11-21), fits. |
+| Display boost circuit | **Correction (2026-11-21): needed after all** — see below | — | I was wrong earlier: "on-chip booster" only means the *control loop* is on-chip; the power stage (inductor, MOSFET, diodes) is external, per the GDEY0213B74 datasheet's own §12 Reference Circuit, read in full this time. |
+| — boost inductor | `L1`: 47µH, 500mA | — | Generic SMD power inductor, LCSC/DigiKey, any RoHS part meeting this spec. |
+| — boost MOSFET | `Q1`: `Si1308EDL` (Vishay), SC-70-3 | N-channel, driven by the panel's GDR pin | LCSC C7603347 / DigiKey. |
+| — boost diodes ×3 | `D1/D2/D3`: `MBR0530T1G` (onsemi), SOD-123 | Schottky, 30V/500mA | LCSC C82046 / DigiKey. Use the `T1G` suffix — the bare `MBR0530` is marked obsolete at some distributors, this is the active direct substitute. |
+| — boost resistors | `R1`: 1MΩ, `R2`: 2.2Ω | 0402/0603 | Current-sense feedback for the `RESE` pin. Generic, any supplier. |
+| — boost/supply caps ×7 | `C3`: 4.7µF/25V; `C5/C6/C7/C9/C10/C12`: 1µF/25V each | 0402/0603 | Ceramic, 25V rating per the reference circuit. Generic, any supplier. |
 | Custom PCB | — | ~1-1.2 mm thick, outline TBD | No longer constrained to round/rectangular — shaped around the battery/speaker/PCB layout once modeled (PCBWay and similar prototype houses fab any outline at no real premium). |
 
 **Suppliers, consolidated on purpose:** LCSC (MCU, charge IC) + DigiKey

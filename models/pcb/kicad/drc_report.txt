@@ -1,0 +1,301 @@
+** Drc report for ara_floorplan.kicad_pcb **
+** Created on 2026-11-21T20:09:00 **
+** Report includes: Errors, Warnings, Exclusions **
+
+** Found 33 DRC violations **
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(106.7750 mm, 111.6500 mm): Pad 1 [<no net>] de SW1 sur F.Cu
+    @(105.8750 mm, 112.5500 mm): Pad Non Métallisé de SW1
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(106.1500 mm, 113.6000 mm): Pad MP [<no net>] de SW1 sur F.Cu
+    @(105.8750 mm, 112.5500 mm): Pad Non Métallisé de SW1
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(109.2250 mm, 111.6500 mm): Pad 1 [<no net>] de SW1 sur F.Cu
+    @(110.1250 mm, 112.5500 mm): Pad Non Métallisé de SW1
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(109.8500 mm, 113.6000 mm): Pad MP [<no net>] de SW1 sur F.Cu
+    @(110.1250 mm, 112.5500 mm): Pad Non Métallisé de SW1
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(109.2250 mm, 88.3500 mm): Pad 1 [<no net>] de SW3 sur F.Cu
+    @(110.1250 mm, 87.4500 mm): Pad Non Métallisé de SW3
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(109.8500 mm, 86.4000 mm): Pad MP [<no net>] de SW3 sur F.Cu
+    @(110.1250 mm, 87.4500 mm): Pad Non Métallisé de SW3
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(93.2250 mm, 88.3500 mm): Pad 1 [<no net>] de SW4 sur F.Cu
+    @(94.1250 mm, 87.4500 mm): Pad Non Métallisé de SW4
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(106.7750 mm, 88.3500 mm): Pad 1 [<no net>] de SW3 sur F.Cu
+    @(105.8750 mm, 87.4500 mm): Pad Non Métallisé de SW3
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(106.1500 mm, 86.4000 mm): Pad MP [<no net>] de SW3 sur F.Cu
+    @(105.8750 mm, 87.4500 mm): Pad Non Métallisé de SW3
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(93.8500 mm, 86.4000 mm): Pad MP [<no net>] de SW4 sur F.Cu
+    @(94.1250 mm, 87.4500 mm): Pad Non Métallisé de SW4
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(90.7750 mm, 88.3500 mm): Pad 1 [<no net>] de SW4 sur F.Cu
+    @(89.8750 mm, 87.4500 mm): Pad Non Métallisé de SW4
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(90.1500 mm, 86.4000 mm): Pad MP [<no net>] de SW4 sur F.Cu
+    @(89.8750 mm, 87.4500 mm): Pad Non Métallisé de SW4
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(90.7750 mm, 111.6500 mm): Pad 1 [<no net>] de SW2 sur F.Cu
+    @(89.8750 mm, 112.5500 mm): Pad Non Métallisé de SW2
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(90.1500 mm, 113.6000 mm): Pad MP [<no net>] de SW2 sur F.Cu
+    @(89.8750 mm, 112.5500 mm): Pad Non Métallisé de SW2
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(93.2250 mm, 111.6500 mm): Pad 1 [<no net>] de SW2 sur F.Cu
+    @(94.1250 mm, 112.5500 mm): Pad Non Métallisé de SW2
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(93.8500 mm, 113.6000 mm): Pad MP [<no net>] de SW2 sur F.Cu
+    @(94.1250 mm, 112.5500 mm): Pad Non Métallisé de SW2
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(129.7900 mm, 97.1000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(128.3900 mm, 97.1000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(130.4900 mm, 97.8000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(129.0900 mm, 97.8000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(127.6900 mm, 97.8000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(129.7900 mm, 98.5000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(128.3900 mm, 98.5000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(130.4900 mm, 99.2000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(129.0900 mm, 99.2000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(127.6900 mm, 99.2000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(129.7900 mm, 99.9000 mm): Pad métallisé 41 [GND] de U1
+[drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
+    Rule: configuration des contraintes du PCB; error
+    @(128.3900 mm, 99.9000 mm): Pad métallisé 41 [GND] de U1
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(138.3000 mm, 85.3500 mm): Segment sur Edge.Cuts
+    @(144.4500 mm, 90.8000 mm): Segment de U1 sur F.Silkscreen
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(138.3000 mm, 85.3500 mm): Segment sur Edge.Cuts
+    @(144.4500 mm, 109.2000 mm): Segment de U1 sur F.Silkscreen
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(62.1000 mm, 107.0000 mm): Segment sur Edge.Cuts
+    @(62.6000 mm, 107.4000 mm): Champ référence de MK1
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuration des contraintes de la sérigraphie; warning
+    @(62.1000 mm, 107.0000 mm): Segment sur Edge.Cuts
+    @(62.6000 mm, 100.0000 mm): Champ référence de J1
+[lib_footprint_mismatch]: L’empreinte 'ESP32-S3-WROOM-1' ne correspond pas à la copie en librairie 'RF_Module'
+    Local override; warning
+    @(131.5500 mm, 100.0000 mm): Empreinte U1
+
+** Found 41 unconnected pads **
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(56.7000 mm, 104.3200 mm): Pad métallisé SH [GND] de J1
+    @(60.5000 mm, 104.3200 mm): Pad métallisé SH [GND] de J1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.1420 mm, 106.5000 mm): Pad 2 [GND] de MK1 sur F.Cu
+    @(58.8900 mm, 108.0625 mm): Pad 3 [GND] de MK1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.5000 mm, 95.6800 mm): Pad métallisé SH [GND] de J1
+    @(60.5800 mm, 97.2500 mm): Pad B12 [GND] de J1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.5000 mm, 95.6800 mm): Pad métallisé SH [GND] de J1
+    @(56.7000 mm, 95.6800 mm): Pad métallisé SH [GND] de J1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.5000 mm, 104.3200 mm): Pad métallisé SH [GND] de J1
+    @(60.1420 mm, 106.5000 mm): Pad 2 [GND] de MK1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.5800 mm, 102.7500 mm): Pad A12 [GND] de J1 sur F.Cu
+    @(60.5000 mm, 104.3200 mm): Pad métallisé SH [GND] de J1
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.5800 mm, 102.7500 mm): Pad A12 [GND] de J1 sur F.Cu
+    @(60.5800 mm, 97.2500 mm): Pad B12 [GND] de J1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.6250 mm, 97.0350 mm): Pad 3 [GND] de U2 sur F.Cu
+    @(78.1000 mm, 96.4000 mm): Pad 9 [GND] de U2 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.6250 mm, 97.0350 mm): Pad 3 [GND] de U2 sur F.Cu
+    @(60.5800 mm, 97.2500 mm): Pad B12 [GND] de J1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(76.1000 mm, 90.0000 mm): Pad 17 [GND] de U4 sur F.Cu
+    @(74.6625 mm, 90.2500 mm): Pad 3 [GND] de U4 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(76.1000 mm, 90.0000 mm): Pad 17 [GND] de U4 sur F.Cu
+    @(75.8500 mm, 88.5625 mm): Pad 15 [GND] de U4 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(76.1500 mm, 107.0000 mm): Pad 2 [GND] de J2 sur F.Cu
+    @(75.6250 mm, 97.0350 mm): Pad 3 [GND] de U2 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(77.5375 mm, 89.7500 mm): Pad 11 [GND] de U4 sur F.Cu
+    @(76.1000 mm, 90.0000 mm): Pad 17 [GND] de U4 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(77.5375 mm, 89.7500 mm): Pad 11 [GND] de U4 sur F.Cu
+    @(81.3625 mm, 90.0000 mm): Pad 2 [GND] de U5 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(81.3625 mm, 90.0000 mm): Pad 2 [GND] de U5 sur F.Cu
+    @(84.4125 mm, 95.6500 mm): Pad 1 [GND] de U3 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.4125 mm, 95.6500 mm): Pad 1 [GND] de U3 sur F.Cu
+    @(78.1000 mm, 96.4000 mm): Pad 9 [GND] de U2 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.4000 mm, 96.4000 mm): Pad 9 [GND] de U3 sur F.Cu
+    @(84.4125 mm, 95.6500 mm): Pad 1 [GND] de U3 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(85.4000 mm, 96.4000 mm): Pad 9 [GND] de U3 sur F.Cu
+    @(84.4125 mm, 97.1500 mm): Pad 4 [GND] de U3 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(127.6900 mm, 97.8000 mm): Pad métallisé 41 [GND] de U1
+    @(85.4000 mm, 96.4000 mm): Pad 9 [GND] de U3 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(129.7900 mm, 99.9000 mm): Pad métallisé 41 [GND] de U1
+    @(136.8100 mm, 108.7500 mm): Pad 40 [GND] de U1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(130.4900 mm, 97.8000 mm): Pad métallisé 41 [GND] de U1
+    @(136.8100 mm, 91.2500 mm): Pad 1 [GND] de U1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(83.6375 mm, 89.0500 mm): Pad 5 [+3V3] de U5 sur F.Cu
+    @(60.9640 mm, 108.3000 mm): Pad 5 [+3V3] de MK1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(135.5400 mm, 91.2500 mm): Pad 2 [+3V3] de U1 sur F.Cu
+    @(83.6375 mm, 89.0500 mm): Pad 5 [+3V3] de U5 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.3500 mm, 88.5625 mm): Pad 16 [I2S_BCLK] de U4 sur F.Cu
+    @(60.1420 mm, 108.3000 mm): Pad 4 [I2S_BCLK] de MK1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(133.0000 mm, 91.2500 mm): Pad 4 [I2S_BCLK] de U1 sur F.Cu
+    @(75.3500 mm, 88.5625 mm): Pad 16 [I2S_BCLK] de U4 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(76.3500 mm, 88.5625 mm): Pad 14 [I2S_WS] de U4 sur F.Cu
+    @(60.9640 mm, 106.5000 mm): Pad 1 [I2S_WS] de MK1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(131.7300 mm, 91.2500 mm): Pad 5 [I2S_WS] de U1 sur F.Cu
+    @(76.3500 mm, 88.5625 mm): Pad 14 [I2S_WS] de U4 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(74.6625 mm, 89.2500 mm): Pad 1 [I2S_DOUT] de U4 sur F.Cu
+    @(130.4600 mm, 91.2500 mm): Pad 6 [I2S_DOUT] de U1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.9640 mm, 107.4000 mm): Pad 6 [I2S_DIN] de MK1 sur F.Cu
+    @(129.1900 mm, 91.2500 mm): Pad 7 [I2S_DIN] de U1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.5800 mm, 98.4800 mm): Pad B9 [VBUS] de J1 sur F.Cu
+    @(60.5800 mm, 101.5200 mm): Pad A9 [VBUS] de J1 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(60.5800 mm, 98.4800 mm): Pad B9 [VBUS] de J1 sur F.Cu
+    @(75.6250 mm, 98.3050 mm): Pad 4 [VBUS] de U2 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(75.6250 mm, 98.3050 mm): Pad 4 [VBUS] de U2 sur F.Cu
+    @(80.5750 mm, 94.4950 mm): Pad 8 [VBUS] de U2 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(76.8500 mm, 91.4375 mm): Pad 8 [VBAT] de U4 sur F.Cu
+    @(76.3500 mm, 91.4375 mm): Pad 7 [VBAT] de U4 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(76.8500 mm, 91.4375 mm): Pad 8 [VBAT] de U4 sur F.Cu
+    @(81.3625 mm, 90.9500 mm): Pad 3 [VBAT] de U5 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(80.5750 mm, 98.3050 mm): Pad 5 [VBAT] de U2 sur F.Cu
+    @(76.1500 mm, 109.0000 mm): Pad 1 [VBAT] de J2 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(81.3625 mm, 90.9500 mm): Pad 3 [VBAT] de U5 sur F.Cu
+    @(81.3625 mm, 89.0500 mm): Pad 1 [VBAT] de U5 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.4125 mm, 96.1500 mm): Pad 2 [VBAT] de U3 sur F.Cu
+    @(81.3625 mm, 90.9500 mm): Pad 3 [VBAT] de U5 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.4125 mm, 96.6500 mm): Pad 3 [VBAT] de U3 sur F.Cu
+    @(84.4125 mm, 96.1500 mm): Pad 2 [VBAT] de U3 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(84.4125 mm, 96.6500 mm): Pad 3 [VBAT] de U3 sur F.Cu
+    @(80.5750 mm, 98.3050 mm): Pad 5 [VBAT] de U2 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(67.8000 mm, 88.6000 mm): Pad 1 [SPK_P] de TP1 sur F.Cu
+    @(77.5375 mm, 90.7500 mm): Pad 9 [SPK_P] de U4 sur F.Cu
+[unconnected_items]: Missing connection between items
+    Local override; error
+    @(71.2000 mm, 88.6000 mm): Pad 1 [SPK_N] de TP2 sur F.Cu
+    @(77.5375 mm, 90.2500 mm): Pad 10 [SPK_N] de U4 sur F.Cu
+
+** Found 0 Footprint errors **
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

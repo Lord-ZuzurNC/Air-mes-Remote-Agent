@@ -1,223 +1,347 @@
-# ARA — case proposal v0.8
+# ARA — case (bottom shell + screen bezel) — v0
 
-**Status: parametric mechanical study, not a manufacturing validation.**
+**Status: geometry built and overlap-checked, not printed, not fit-tested.**
+Rectangular, 93.8 × 33.8 × 12.5 mm assembled. Two printable bodies and 21
+component ghosts in one SolidCraft design; `inspect.clearance` over all 23
+bodies reports no overlap. Five items are blocking before a print is worth
+doing — see **Blocking**.
 
-Built in SolidCraft around the fixed BOM of `docs/DESIGN.md`. Goal of this
-iteration: the shortest, smallest shell the fixed components allow, and an
-MCU placement whose antenna is no longer over the battery. Earlier studies
-(OpenSCAD v0.4/v0.5, SolidCraft back shells v01–v07) live in `.history/`,
-which is not tracked.
+![iso view](ara_case_iso.png)
 
-## Composition
+Back face (antenna end to the right, speaker grille and the two screws at
+the bottom end):
 
-- `ARA_case_v08.sc`: SolidCraft source. Every size is a named parameter
-  (`R`, `wall`, `floor_t`, `top_t`, `bat_h`, `seam`, `closure_r`, …) and
-  every feature is named. Bodies prefixed `G_` are **component ghosts**
-  (battery, PCB, MCU shield / antenna zone, speaker, USB-C, display,
-  switches, inserts, mic, ZIF, JST, PCB screw heads) kept for clearance
-  checks; they are not parts.
-- `ARA_case_v08.step`: the three printable parts only.
-- `ara_v08_front.stl`: front body — display face, side wall, buttons,
-  USB-C opening, carries the PCB. Exported in assembly orientation; print
-  it display face down (fence and posts then point up, no support).
-- `ara_v08_back.stl`: back lid — floor, speaker grille, battery rails,
-  screw heads. Prints as exported.
-- `ara_v08_button.stl`: one plunger (print 4), exported along X; stand it
-  upright to print.
+![back view](ara_case_back.png)
 
-There is no separate screen retainer anymore: the PCB holds the panel
-through a foam frame (see below).
+## Files
 
-## Geometry
+| File | Content |
+|---|---|
+| `ara_case.sc` | SolidCraft source: parameters, both printable bodies, all ghosts (`G_*`) |
+| `ara_bottom_shell.stl` | Bottom shell, as modelled (Z up, back face on the bed) |
+| `ara_bezel.stl` | Screen bezel with its posts, hooks and panel stops, as modelled (flip to print front-face down) |
+| `ara_case_assembly.step` | All 23 bodies, for import into other CAD |
+| `ara_case_iso.png`, `ara_case_back.png` | Renders of the current model |
 
-**Ø58 × 12.7 mm** (60.0 mm across the button caps). Previous study:
-Ø60 × 22 mm.
+## Axes and orientation words
 
-Vertical stack, from the back face (z = 0) up — this is what sets the
-height, each line is a parameter:
+Model axes: X along the length, Y across the width, Z from the back face
+(z = 0) to the front (display side). Origin at the centre of the outline.
 
-| z (mm)      | Layer                                                  |
-| ----------- | ------------------------------------------------------ |
-| 0 – 1.6     | back floor (`floor_t`)                                 |
-| 1.6 – 8.9   | battery, worst-case 7.3 mm (`bat_h`)                   |
-| 8.9 – 9.3   | air above the battery (`bat_gap`), never clamped        |
-| 9.3 – 10.5  | PCB, 1.2 mm (`pcb_t`)                                  |
-| 10.5 – 11.3 | foam frame on the panel's inactive border (`foam`)     |
-| 11.3 – 11.7 | ET013TT1 panel, 0.4 mm (`panel_t`)                     |
-| 11.7 – 12.7 | front lip around the window (`top_t`)                  |
+How the everyday words are mapped onto those axes — **this is an
+interpretation, correct it here if it is wrong**:
 
-Everything else fits **beside** the battery in the 7.7 mm under the PCB,
-not stacked on it: MCU, USB-C, the four switches, mic and JST are on the
-PCB's **back side**; the speaker lies on the floor under the MCU.
+| Word | Meaning in the model | Why |
+|---|---|---|
+| **top** (end) | **+X**, the antenna end | Requested: with the display read right-side-up, the antenna end is up. Nothing mechanical fixes "up" (no carry mode), so it is fixed by this convention and by the firmware drawing the panel in portrait with +X up. |
+| **bottom** (end), "bottom face" | **−X** end, the end wall at x = −46.9 | Opposite the antenna. Carries the USB-C, the speaker, the mic port, the display FPC fold and the two screws. |
+| **back face** | z = 0 | Speaker grille, screw heads. |
+| **top plate** | the bezel, +Z | Screen side. |
+| left / right | +Y / −Y, looking at the display with +X up | |
+| horizontal / vertical | along Y / along X | Device held in portrait. |
 
-- **Split**: flat seam at z = 5.0 (`seam`). Back lid 0 – 5.0, front body
-  5.0 – 12.7. Wall 1.6 mm, 2 mm rounds on both outer edges.
-- **Closure**: 4× M2 button-head screws (M2×8) threaded from the back
-  through Ø2.45 clearance holes, heads in Ø4.3 × 1.5 recesses, into M2
-  heat-set inserts in Ø3.2 × 4.0 pilots at the bottom of the front's
-  Ø5.6 bosses. Bosses at r = 24.8 mm, ±33° and 180 ± 33° — clear of the
-  battery, the USB-C, the buttons and the antenna. No screw on the display
-  face.
-- **Display**: 23.5 mm square window (active area 23.30 + 0.1 mm per side)
-  in a 1.0 mm lip. The panel drops into a 0.8 mm locating fence
-  (27.5 × 28.8 mm inside, 0.2 mm per side) that also serves as the PCB's
-  upper stop; 16 mm gap in the fence's lower side for the FPC.
-- **MCU**: `ESP32-S3-WROOM-1` on the PCB back side, long axis along Y,
-  **antenna toward 12 o'clock**, module spanning y = −0.15 … 25.35 mm.
-  The PCB is cut away under the antenna zone (y > 18.85 mm, |x| < 10 mm).
-- **Battery**: `LP702030` envelope 32 × 20.5 × 7.3 mm in the lower half of
-  the lid (centre y = −11.15 mm), 0.8 mm rails at 0.25 mm per side, open at
-  both short ends for the JST-PH lead.
-- **Speaker**: `CDS-20144` on the lid floor under the MCU's shielded half
-  (centre y = 8 mm, 0.5 mm gasket below it), square locating fence
-  20.6 × 14.6 mm so any 20 × 14 oval fits, grille of 15 × Ø1.4 mm holes
-  through the 1.6 mm floor directly under the diaphragm.
-- **USB-C** at **9 o'clock** (y = −4.5 mm), receptacle on the PCB back side,
-  centred 1.58 mm below the board (z = 7.72), front 0.3 mm behind the outer
-  surface. 9.4 × 3.6 mm stadium opening, extended by a notch down to the
-  seam so the receptacle slides in with the board.
-- **Buttons**: Talk 12.5°, Stop 0°, Menu −12.5° (right side), Power 167.5°
-  (left, above the USB-C). Ø3.4 holes on the same axis height as the USB-C
-  (z = 7.72). Plunger: Ø5.0 × 0.8 flange inside, Ø3.0 shaft, cap 1.2 mm
-  proud; 0.2 mm to the switch actuator at rest.
-- **Mic**: `ICS-43434` (bottom port) on the PCB back side at
-  (−6, −23.6), sound through a Ø1.0 front hole and a short tube ending
-  0.3 mm above the PCB for a foam ring.
-- **PCB**: Ø52.4 disc with four Ø6.4 notches at the closure bosses and the
-  antenna cut-out. Held in the front by 3 M2 thread-forming screws (from
-  the board's back) into Ø4.5 posts at (±18, 4) and (0, −24.3).
+The antenna was already alone at the +X end; no geometry was flipped to
+make it the top. With +X up the panel's FPC tail is at the bottom.
 
-## What changed from the previous iteration
+The speaker's previous position was described as "back face, top-left,
+vertical". That matches the previous iso render — where the −X end is
+drawn toward the top of the picture and the −Y side toward the left — and
+a 20 mm side lying along X. In that picture "top" is the −X end, the
+opposite of the convention above. The target "bottom-center, horizontal"
+was applied in the convention above: −X end, centred on y = 0, 20 mm side
+along Y. Read the other way (bottom = +X) it would put the speaker under
+the antenna, inside the keep-out; that was not done.
 
-Compared against `.history/ARA_shell_v05.scad` and the measured geometry
-of `.history/ARA_back_USB_clean_editable_v07.sc`:
+## Stack (Z)
 
-| | v0.5 / v07 | v0.8 |
-| --- | --- | --- |
-| Outer size | Ø60 × 22 mm (back 16 + front 6) | **Ø58 × 12.7 mm** |
-| Envelope volume | 62.2 cm³ | **33.6 cm³ (−46 %)** |
-| Side wall / floor / display lip | 2.0 / 2.0 / 1.2 mm | 1.6 / 1.6 / 1.0 mm |
-| Parts | front, back, retainer, 4 plungers | front, back, 4 plungers |
-| Battery ↔ MCU | MCU stacked on top of it | side by side |
-| Antenna ↔ battery | 1.6 mm, directly above | **19.75 mm**, beside |
-| USB-C | 6 o'clock | 9 o'clock |
-| Closure bosses | Ø8.4 at r = 27 in the `.scad`, r = 24 in v07 | Ø5.6 at r = 24.8 |
+| z (mm) | Layer |
+|---|---|
+| 0 → 1.6 | back wall (`floor_t`), speaker grille; locally 0 → 3.0 under the two screws |
+| 1.6 → 8.6 | battery (7.0); speaker (1.6 → 4.8) at the bottom end |
+| 8.6 → 8.9 | gap battery → PCB (`batt_gap` 0.3) |
+| 8.9 → 9.9 | PCB (`pcb_t` 1.0), every component on its back-facing side |
+| 9.9 → 10.3 | foam pad, compressed (`disp_gap` 0.4) |
+| 10.3 → 11.3 | display panel (1.0) |
+| 11.3 → 12.5 | bezel (`bezel_t` 1.2), flush with the shell rim; its underside bears on the panel border (`top_gap` 0) |
 
-Height went from 22 to 12.7 mm (−9.3 mm). The old stack was floor 2 +
-battery 7.3 + 0.4 + PCB 1.2 + MCU 3.1 on top of the board + 2 mm free to the
-seam, then a 6 mm front holding the panel and its retainer. Now the MCU sits
-beside the battery under the board, the PCB itself holds the panel, and the
-walls are 0.4 mm thinner.
+The PCB rests on a 1.2 mm ledge (`ledge`) running along both long walls at
+z = 8.9. The bezel drops into a rabbet in the rim: 1.0 mm outer lip (`lip`),
+0.15 mm fit per side (`bez_fit`).
+
+## Layout (XY)
+
+Length is set by one sum, all named parameters:
+
+`cav_l = fpc_fold 9.0 + disp_l 59.2 + ant_keepout 15.0 + ant_l 6.0 + ant_gap 0.6 = 89.8`,
+`L = cav_l + 2·wall = 93.8`. Width: `W = disp_w 29.2 + 2·fit 0.3 + 2·wall 2.0 = 33.8`.
+
+`fpc_fold = usb_recess 1.0 + usb_d 6.8 + 1.2 + fpc_slot 2.5 − 0.5 − wall 2.0 = 9.0`:
+at the bottom end the USB-C receptacle and the FPC fold sit one behind the
+other along X. That is 6.0 mm more than the 3.0 mm the fold alone needed —
+the cost of a centred USB-C on that end (see **USB-C**).
+
+| Item | X range | Y range | Note |
+|---|---|---|---|
+| PCB | −44.65 → 38.3 | ±14.65 | one slot and two post holes, below |
+| Display outline | −35.9 → 23.3 | ±14.6 | FPC end at −X (bottom) |
+| Bezel window | −31.075 → 18.475 | ±12.35 | active area + 0.5 margin, **centred on the outline — placeholder, see Blocking 1** |
+| ESP32 module body | 18.8 → 38.3 | ±9.0 | on the PCB back side |
+| Antenna | 38.3 → 44.3 | ±9.0 | overhangs the PCB edge (PCB ends at 38.3) |
+| Battery | −12.2 → 17.8 | ±10.0 | on the floor; nothing can sit on the PCB above it |
+| Speaker | −39.1 → −25.1 | ±10.0 | on the floor, 20 mm side along Y; grille 3 × 5 holes Ø1.5, pitch 3.0, centred under it |
+| USB-C | −45.9 → −39.1 | ±4.47 | under the PCB, z 5.74 → 8.9; mouth 1.0 mm behind the end wall's outer face (`usb_recess`) |
+| FPC slot in the PCB | −37.9 → −35.4 | ±7.0 | `fpc_slot` × `fpc_slot_w` |
+| FPC connector | −33.9 → −28.3 | ±7.55 | PCB back side, mouth toward the slot |
+| Bezel posts / screws | x = −41.4 | y = ±11.5 | Ø4.0 posts through Ø4.4 PCB holes |
+| Bezel hooks | at the +X end wall | 6 → 12 on each side | plastic only |
+| Buttons | centred at x = ±8 | both long walls | openings 5.2 × 2.1 mm, z 6.9 → 9.0 |
+| Mic port | x = −41.11 | y = 7.4 | Ø1.0 through the bezel, in the strip below the display |
+
+**Battery access:** by full split — two screws out, shell off, unplug the
+JST-PH from the PCB's back side.
+
+## USB-C
+
+On the bottom end wall, centred (y = 0). The opening is a stadium (two
+half-circles joined by straight sides), 9.64 × 3.86 mm, end radius 1.93 —
+the receptacle shell outline 8.94 × 3.16 mm from `docs/DESIGN.md` plus
+`usb_clr` 0.35 all round. The ghost is the same stadium, 6.8 mm deep. The
+previous opening was a square-cornered 9.64 × 3.86 rectangle, which read
+as USB-A.
+
+No mechanical drawing of the SHOU HAN TYPE-C 6P CB1.6(073) was available
+(none in KiCad's library, no web access when this was built). Only the
+three body dimensions come from the part; the end radius is the USB-C
+shell's own geometry (half its height).
+
+A centred USB-C and the display FPC both want the middle of the same end:
+the receptacle is 8.94 mm wide, the FPC at least 12.5 mm (24 × 0.5 mm
+contacts), the board 29.3 mm. They cannot sit side by side, so they sit in
+series along X — receptacle at the board edge, then a slot through the
+board for the FPC. Hence the extra 6.0 mm of length.
+
+## Display FPC routing
+
+Decided: the tail does not leave the panel sideways in its own plane. It
+comes off the panel's bottom end, turns down through the PCB slot and
+folds back under the board into the connector on the back side —
+`G_FPCTail` models that path.
+
+The connector's position is consistent with this: before and after this
+change it sits on the PCB's back side at the panel's FPC end, mouth facing
+the edge the tail comes over, 2.0 mm inboard of the panel end. What
+changed is the edge: the tail used to wrap the board's outer edge and now
+wraps the slot's, because the USB-C took the outer edge. That end is the
+**bottom** in the convention above; "the connector is at the top" holds
+only in the earlier render's reading, where the −X end is drawn up.
+
+`G_FPCTail` is an idealisation: 12.5 mm wide, 0.3 mm thick, square
+corners, 1.0 mm past the panel end. None of that is measured.
+
+## Assembly and retention
+
+The bezel carries everything; the bottom shell is the lid.
+
+1. Bezel face down. The panel goes in **from behind**, face against the
+   bezel underside. It cannot go through: the window (49.55 × 24.7) is
+   smaller than the outline (59.2 × 29.2) — 2.25 mm of overlap on each long
+   side, 4.825 mm on each short side while `act_off_x` = 0.
+2. Three stops on the bezel underside locate the panel along X, 0.2 mm
+   from each end: one at the top end (`PanelStopTop`), two at the bottom
+   end either side of the FPC tail (`PanelStopBotA/B`). Along Y the panel
+   is located by the shell walls (0.3 mm per side) once closed, and by
+   nothing before that.
+3. Foam pad, then the PCB over the two bezel posts, tail through the slot
+   into the connector. The posts fix the PCB in X and Y.
+4. Battery and speaker in the bottom shell, JST-PH plugged, speaker wires
+   on their pads.
+5. The two hook noses at the bezel's top end go into pockets in the
+   shell's +X end wall; the shell swings closed and two screws go in from
+   the back face, through the floor, into the posts.
+
+The panel has no retention feature of its own. Closed, it is held between
+the bezel underside (contact) and the foam on the PCB, the PCB on its
+ledges; the hooks and screws are what keep that stack shut.
+
+| Feature | Body | Geometry |
+|---|---|---|
+| Posts ×2 | bezel | Ø4.0, z 3.1 → 11.3, pilot Ø1.6 × 5.5 deep |
+| Screw seats ×2 | shell | floor thickened to 3.0, Ø2.2 through, Ø4.2 × 1.8 counterbore from the back |
+| Hooks ×2 | bezel | tongue 1.2 × 6 × 2.0 under the plate, nose 0.9 mm into the wall, z 9.5 → 10.5 |
+| Hook pockets ×2 | shell | 1.0 deep × 6.6 × 1.35, z 9.3 → 10.65; 1.0 mm of wall left outside |
+| Screws ×2 (`G_Screw1/2`) | ghost | thread-forming Ø2 × 6 pan head, placeholder; shank drawn at its 1.5 mm core |
+
+No metal at the antenna end: the hooks are printed, the screws are 77.9 mm
+from the antenna.
+
+## Measured
+
+Volumes (`measure`), against the values computed before building:
+
+| Body | Bounding box (mm) | Volume measured | Volume computed | Faces |
+|---|---|---|---|---|
+| `BottomShell` | 93.8 × 33.8 × 12.5 | 11 323.60 mm³ | 11 323.60 mm³ | 89, closed |
+| `Bezel` | 91.55 × 31.5 × 9.4 | 2 241.26 mm³ | 2 241.26 mm³ | 56, closed |
+
+Solid-volume mass at 1.27 g/cm³ (PETG): 14.4 g shell, 2.8 g bezel.
+
+Overlap check, all 23 bodies (`inspect.clearance {}`), verbatim:
+
+```
+{"bodies":23,"near":[],"nearest":{},"overlaps":[],"pairs_checked":61,
+ "pairs_pruned":192,"pairs_reused":0,"truncated":false,"unchecked":[]}
+```
+
+Grille, from the shell's cylinder faces: 15 holes Ø1.5 through the 1.6 mm
+floor at x = −35.1 / −32.1 / −29.1, y = 0, ±3, ±6 — a 7.5 × 13.5 mm field
+centred in the 14 × 20 mm speaker footprint, 5.5 mm from the nearest screw
+counterbore.
+
+Parameter test (`check_parameters {ant_keepout: 10, batt_h: 8, usb_d: 7.5}`):
+`errors: []`, shell rebuilds to 89.5 × 33.8 × 13.5 mm, design restored.
+Ghosts placed with plain numbers (`G_JST`, `G_TP4056`, `G_MAX17048`,
+`G_MAX98357A`, `G_AP2112K`, `G_FPC`'s and `G_FPCTail`'s Y, switch Y, hook
+and stop Y) do not follow parameters; the others do.
 
 ## Antenna keep-out
 
-Espressif asks for 15 mm of clearance around the PCB antenna inside the
-finished enclosure. Measured distances from the antenna zone (the module's
-last 6.5 mm, an assumption to check against the module drawing):
+Rule applied: no metal-bearing part of the device within 15 mm of the
+antenna volume (18 × 6 × 3.1 mm box), measured in 3D, in every direction —
+stricter than a sideways/forward-only reading. Distances from `G_Antenna`
+(`inspect.clearance`, exact faces):
 
-| To | v0.8 (measured) | v0.5 (calculated from the `.scad`) |
-| --- | --- | --- |
-| Battery | **19.75 mm** | 1.6 mm, overlapping in plan |
-| Closure inserts (brass + screw) | 11.15 mm | ~8.4 mm |
-| PCB hold screws | 15.5 mm | — |
-| Switches | 17.5 mm | — |
-| USB-C | 22.9 mm | — |
-| Display panel | 5.06 mm | ~6.4 mm |
-| Speaker | **3.95 mm** | ~6.4 mm |
-| Plastic side wall | **0.5 mm** at the corner, 2.05 mm on axis | 7.9 mm at the corner, ~14.5 mm on axis |
+| To | Distance (mm) | |
+|---|---|---|
+| Display panel | **15.07** | governs `ant_keepout`; 0.07 mm of margin |
+| Battery | 20.50 | |
+| Switches SW1 / SW3 | 28.14 | |
+| Switches SW2 / SW4 | 44.10 | |
+| MAX17048 | 51.90 | |
+| AP2112K | 54.30 | |
+| JST-PH | 54.90 | |
+| TP4056 | 57.20 | |
+| MAX98357A | 60.70 | |
+| Speaker | 63.41 | |
+| FPC connector | 66.60 | |
+| FPC tail | 72.20 | |
+| Microphone | 76.95 | |
+| USB-C | 77.40 | |
+| Screws | 77.94 | |
+| Module body, PCB edge | 0 | by construction; PCB stops at the antenna base line |
+| Bezel hook tongue (plastic) | 0.40 | above the antenna |
+| Shell end wall (plastic) | 0.60 | |
 
-The ~13.8 mm figure in earlier notes could not be reproduced from any of
-the earlier geometries and is superseded by this table.
+What this does **not** cover: the outside world. The outer wall is 7.9 mm
+from the antenna's sides and 2.6 mm from its tip, so a hand or a metal
+surface against the +X end is inside 15 mm regardless of the case.
 
-## Planned assembly order
+The 15 mm between display and antenna is the largest single term in the
+length. KiCad's library footprint for this module draws the keep-out as a
+T (15 mm to each side and ahead of the antenna, nothing behind its base
+line); under that reading `ant_keepout` could shrink toward 0 and the case
+toward ~79 mm. Left at 15 here; it is one parameter if an RF test says
+otherwise.
 
-1. Press the 4 M2 heat-set inserts into the front's bosses from the seam
-   face (soldering iron, not cold).
-2. Fit the 4 plungers from the inside, flange against the wall.
-3. Lay the panel face down in the fence, FPC tail through the lower gap,
-   then the foam frame on its inactive border.
-4. Plug the FPC into the ZIF on the PCB, then lower the PCB in, back side
-   facing out; the USB-C slides into its notch. Fix it with the 3 M2
-   thread-forming screws.
-5. In the back lid: speaker with its gasket into the fence, battery into
-   its rails.
-6. Plug the battery (JST-PH) and the speaker into the PCB, close the lid,
-   4 M2×8 screws from the back.
+## Margins
 
-**Battery replacement**: 4 screws, lift the lid (the battery comes with it),
-unplug the JST-PH. The screen isn't touched.
-**Screen replacement**: lid off, unplug battery and speaker, 3 PCB screws,
-lift the board, open the ZIF; the panel lifts out of its fence. No glue
-anywhere.
+Smallest gaps, measured with `inspect.clearance`:
 
-## To validate before a working electronic prototype
+| Pair | Gap (mm) | Comment |
+|---|---|---|
+| Bezel ↔ display top | 0 | contact by design; tolerance is taken by the foam, not by a gap |
+| Screw core ↔ post pilot | 0.05 | radial; the thread is meant to cut into the post |
+| Hook nose ↔ pocket | 0.10 end, 0.15 above | from the feature dimensions; lets the top end lift 0.15 |
+| Bezel post ↔ PCB hole | 0.20 | radial |
+| Display ↔ side walls | 0.30 | `fit` |
+| PCB ↔ battery | 0.30 | **no swelling allowance** for the Li-Po |
+| Switch body ↔ shell opening | 0.33 | |
+| USB-C shell ↔ opening | 0.35 | `usb_clr` |
+| PCB ↔ display | 0.40 | foam, compressed thickness, not chosen |
+| Antenna ↔ end wall | 0.60 | |
+| FPC tail ↔ slot edge | 0.64 | idealised tail |
+| FPC tail ↔ bezel underside | 0.70 | idealised tail |
+| Bezel post ↔ speaker | 0.75 | speaker drawn as a box; the real frame is oval |
+| Bezel post ↔ microphone | 0.78 | |
+| Screw head ↔ speaker | 0.85 | |
+| Speaker ↔ JST-PH | 0.90 | |
+| Speaker top ↔ USB-C underside | 0.94 | vertical |
+| Battery ↔ module | 1.00 | `batt_mod_gap` |
+| Battery ↔ switches | 1.20 | |
+| Battery ↔ MAX17048 | 1.40 | |
+| Microphone ↔ USB-C | 1.66 | |
+| JST-PH ↔ ledge | 1.75 | |
+| Speaker top ↔ FPC connector | 2.10 | vertical |
+| USB-C ↔ FPC tail | 2.20 | |
+| Speaker top ↔ PCB | 4.10 | vertical |
+| Battery ↔ JST-PH mouth | 4.40 | room for the lead bend |
+| Speaker ↔ battery | 12.90 | |
 
-**Blocking**
+Walls: 2.0 mm sides, 1.6 mm back, 1.0 mm rim lip. At the four corners the
+cavity is square inside a 4 mm outer radius, so the wall thins to 1.17 mm
+and the bezel seat narrows to 0.17 mm there (computed, not measured).
 
-- **PCB floorplan is now out of date**: `models/pcb/` still has the MCU on
-  the top face, antenna toward +X, USB-C at 6 o'clock and notches at
-  r = 27. This case needs a double-sided board: MCU, USB-C, switches, mic,
-  JST, charger on the back side, the ZIF alone on the top side outside the
-  display footprint, the copper-free cut-out under the antenna, and
-  notches at r = 24.8 / ±33°.
-- **Antenna**: the battery problem is fixed (19.75 mm). The antenna now
-  sits 0.5 mm from the plastic wall and 3.95 mm from the speaker magnet.
-  A Ø60 shell (`R = 30`) gives +1 mm to the wall without other changes. A
-  range test on a real prototype remains mandatory.
-- **USB-C at 9 o'clock** instead of 6, and a USB-C receptacle mounting
-  assumption (top-mount, body on the board face, centred 1.58 mm off it)
-  that the `CB1.6(073)` drawing has to confirm — a mid-mount version moves
-  `usb_z` and the button axis with it.
-- **Side switches** aren't chosen: the model reserves 3.5 × 4 × 3 mm per
-  switch on the board's back side, actuator axis 1.58 mm below the board,
-  at r = 26.2 mm. The plunger length follows the part picked.
-- **E-Ink panel**: FPC exit assumed on the lower edge (16 mm gap), active
-  area assumed centred on the outline, no cover glass; the foam frame
-  pressure on the panel border is the retention method and is untested.
-- **Screws/inserts**: M2 heat-set reference dimensions (Ø3.2 × 4.0 pilot),
-  not a datasheet match yet. The PCB hold screws only bite 1.8 mm, enough
-  to keep the board in place with the lid off, not more; their pilots
-  leave 0.4 mm of material under the front face.
+## Blocking
 
-**Margins to watch**
+1. **Display active-area position and FPC tail dimensions are unknown.**
+   `docs/DESIGN.md` gives the panel outline and the active-area size but
+   not where the active area sits inside the outline. The window is
+   centred on the outline (`act_off_x = 0`), which is almost certainly
+   wrong along X. The routing is decided; the tail's lateral position,
+   width, thickness, length and bend radius are not measured, so the slot
+   (2.5 × 14 mm) and the 2.0 mm from panel end to connector are
+   assumptions. Needs the Good Display mechanical drawing or a calliper on
+   the real panel.
+2. **USB-C receptacle drawing missing.** Position, opening shape and body
+   size are set; the mounting is not. The ghost is surface-mounted under
+   the PCB and overhangs its edge by 1.25 mm. If "CB1.6" in the part name
+   means a sunk-board (mid-mount) type, its height relative to the PCB and
+   the opening's Z both change.
+3. **No button caps.** The switch is final (Alps SKRTLAE010; the ghost,
+   4.5 × 3.39 × 1.65 mm, matches the 4.5 × 3.4 × 1.65 in `docs/DESIGN.md`
+   and the outline of KiCad's footprint for that part, so no geometry
+   changed). Its actuator tip stops 0.3 mm short of the cavity wall; a
+   cap/plunger has to bridge that and the 2.0 mm wall.
+4. **Fasteners are not in the BOM.** The two screws are a placeholder
+   size; pilot diameter and engagement (4.7 mm) are untested in PETG.
+5. **The FPC connector has no BOM entry.** Its ghost is a Hirose FH12-24S
+   outline, 2.0 mm high.
 
-- Battery: 0.4 mm above the worst-case 7.3 mm envelope (0.7 mm on the
-  7.0 mm nominal), 0.25 mm to each rail. Little room for swelling.
-- JST-PH zone (4.5 × 6 × 4.2 mm on the board's back side, right of the
-  battery) sits 0.1 mm above the battery rail: placeholder until the real
-  connector is picked.
-- Screw head recesses end 0.05 mm inside the flat part of the back face.
-- No registration lip between lid and front: alignment relies on the 4
-  screws (±0.2 mm).
+## Unvalidated
 
-**Recommended tests**
+- Component heights for the JST-PH header (5.5), FPC connector (2.0),
+  TP4056 (1.75), MAX17048 (0.75), AP2112K (1.45, the SOT-23-5 package
+  maximum) and the switch (1.65) are recalled datasheet values; KiCad's 3D
+  models are not installed on this machine to check them against.
+  MAX98357A (0.75) is the figure in `docs/DESIGN.md`.
+- Closing the case: the hook-and-swing motion with 8.2 mm posts has not
+  been simulated; the posts clear the end wall by 1.5 mm.
+- The bezel bears on the panel with no nominal gap. With the foam too
+  thick or the print too tall the panel is squeezed; nothing here limits
+  that force.
+- Nothing fixes the speaker or the battery.
+- Mic path: 1.4 mm of open air between the PCB top and the bezel underside
+  at the port; needs a gasket or a printed chimney.
+- Speaker has no gasket to the grille and no defined back volume.
+- 1.0 mm USB-C recess vs. plug engagement.
+- Printability: the USB opening is a 9.64 mm bridge with rounded ends, the
+  button openings 5.2 mm, the hook pockets 6.6 mm; the rim lip is 1.0 mm
+  (2 perimeters at 0.4 mm); the posts are 8.2 mm tall on a 1.2 mm plate.
 
-- Print first in low-cost PLA to check fit, then PETG; check the 1.6 mm
-  walls and the 1.0 mm lip come out clean.
-- Speaker intelligibility with the device lying on its back (grille
-  partly blocked) and with the open back volume under the MCU.
-- Plunger travel, switch force and accidental presses, especially Talk vs
-  Stop at 6 mm spacing.
-- Thermal behaviour of the charger and amplifier.
+## Recommended tests
 
-## Validation done so far
+1. Calliper the real GDEY0213B74 (active-area offset, FPC position, width
+   and tail length), set `act_off_x`, `fpc_slot`, `fpc_slot_w`, re-run the
+   clearance check.
+2. Print both bodies in PETG; check bezel fit in the rabbet (0.15 mm/side),
+   that the hooks engage and the case swings closed, and that the PCB
+   ledge prints clean without support.
+3. Drive the two screws into printed posts; check they hold and the posts
+   do not split.
+4. Dry-fit battery, speaker and a USB-C plug through the opening.
+5. RF: RSSI at a fixed distance with the display in place, then with the
+   module slid 5 and 10 mm toward the display, to decide whether
+   `ant_keepout` can come down; repeat with the +X end held in a fist.
 
-Measured in SolidCraft on the v0.8 model, not assumed:
+---
 
-- Each build stage matched the hand-computed volume (front 4381.7 mm³,
-  back 5493.2 mm³, within 0.01 %); all parts are closed solids.
-- `inspect.clearance` over all 27 bodies (parts + component ghosts): **no
-  overlap**, except the four heat-set inserts in their pilots (intended
-  0.2 mm interference). This caught a real defect in the USB-C opening
-  (0.2 mm wall sliver against the receptacle), fixed before export.
-- Closure boss to display panel: **4.46 mm** in plan, at the same height
-  (the old "~3.2 mm" comment only matches the ET013TT1 envelope at r = 27
-  in the `.scad`; the r = 24 bosses really present in v07 give 0.2 mm).
-- Boss outer edge at r = 27.6 merges into the side wall (inner r = 27.4,
-  outer 29) — nothing is clipped by the outer surface any more.
-- The antenna distances in the table above.
-
-Not verified: anything electrical, acoustic, thermal, or printed.
-
-**Intellectual property**: this model proposal is distributed under
-CC BY-SA 4.0 so it can be modified and shared in the spirit of the project.
+Licence: CC-BY-SA-4.0.
