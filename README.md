@@ -14,7 +14,7 @@ Form factor target: close to a Limitless Pendant, round, no fixed wearing mechan
 
 **Status: design phase, hardware ahead of firmware.**
 No code exists yet, neither on the device nor in the companion app.
-The mechanical shell and the PCB are past placeholder stage: a fixed component BOM, a parametric OpenSCAD shell with two working halves, and a KiCad board floorplan validated by DRC.
+The mechanical shell and the PCB are past placeholder stage: a fixed component BOM, a parametric SolidCraft shell with two working halves, and a KiCad board floorplan validated by DRC.
 `docs/DESIGN.md` is the source of truth for every decision below; this file only summarises it.
 
 ## Interface
@@ -47,7 +47,7 @@ Full table, footprints and sourcing notes: `docs/DESIGN.md#components`.
 | Part       | Ref                                                | Brand                                 |
 | ---------- | -------------------------------------------------- | ------------------------------------- |
 | MCU        | `ESP32-S3-WROOM-1-N16R8` (16 MB flash, 8 MB PSRAM) | Espressif Systems                     |
-| Display    | `GDEW0154M09` — 1.54", 200×200, 4 grey levels, SPI | GoodDisplay                           |
+| Display    | `ET013TT1` — 1.3", 256×256, 2 grey levels, SPI     | E Ink (via Unisystem)                 |
 | Microphone | `ICS-43434` (I2S MEMS)                             | TDK InvenSense                        |
 | Speaker    | `CDS-20144` (1 W, 4 Ω)                             | Same Sky (Formerly CUI Devices)       |
 | Battery    | `LP702030` / EEMB 350 mAh Li-Po, JST-PH            | EEMB Battery                          |
@@ -58,7 +58,7 @@ Full table, footprints and sourcing notes: `docs/DESIGN.md#components`.
 ## Repository layout
 
 - `docs/DESIGN.md` — full decision log: Bluetooth, form factor, MCU, audio, enclosure, companion app, licence, UX state machine, charging/serviceability, BOM.
-- `models/case/` — parametric OpenSCAD shell (v0.6), see `models/case/README.md`.
+- `models/case/` — parametric SolidCraft shell, see `models/case/README.md`.
 - `models/pcb/` — KiCad board floorplan v0.1, placement-only, see `models/pcb/README.md`.
 
 ## Open / not yet validated
