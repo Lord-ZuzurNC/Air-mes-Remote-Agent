@@ -16,42 +16,42 @@ speaker grille and the two screws at the bottom end):
 
 ## Files
 
-| File | Content |
-|---|---|
-| `ara_case.sc` | SolidCraft source: parameters, both printable bodies, all ghosts (`G_*`) |
-| `ara_bottom_shell.stl` | Bottom shell, as modelled (Z up, back face on the bed) |
-| `ara_bezel.stl` | Screen bezel with its posts, hooks and panel stops, as modelled (flip to print front-face down) |
-| `ara_case_assembly.step` | All 25 bodies, for import into other CAD |
-| `ara_case_iso.png`, `ara_case_back.png` | Renders of the current model |
+| File                                    | Content                                                                                         |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `ara_case.sc`                           | SolidCraft source: parameters, both printable bodies, all ghosts (`G_*`)                        |
+| `ara_bottom_shell.stl`                  | Bottom shell, as modelled (Z up, back face on the bed)                                          |
+| `ara_bezel.stl`                         | Screen bezel with its posts, hooks and panel stops, as modelled (flip to print front-face down) |
+| `ara_case_assembly.step`                | All 25 bodies, for import into other CAD                                                        |
+| `ara_case_iso.png`, `ara_case_back.png` | Renders of the current model                                                                    |
 
 ## Axes and orientation words
 
 Model axes: X along the length, Y across the width, Z from the back face
 (z = 0) to the front (display side). Origin at the centre of the outline.
 
-| Word | Meaning in the model | What is there |
-|---|---|---|
-| **top** (end) | **+X**, the end with the two plastic hooks | Antenna, hooks. No metal. |
-| **bottom** (end) | **−X**, the end with the two screws | Screws and posts, speaker, mic port, display FPC fold. |
-| **back face** | z = 0 | Speaker grille, screw heads. |
-| **top plate** | the bezel, +Z | Screen side. |
-| left / right | +Y / −Y, looking at the display with the top up | USB-C is on the right wall. |
-| horizontal / vertical | along Y / along X | Device held in portrait. |
+| Word                  | Meaning in the model                            | What is there                                          |
+| --------------------- | ----------------------------------------------- | ------------------------------------------------------ |
+| **top** (end)         | **+X**, the end with the two plastic hooks      | Antenna, hooks. No metal.                              |
+| **bottom** (end)      | **−X**, the end with the two screws             | Screws and posts, speaker, mic port, display FPC fold. |
+| **back face**         | z = 0                                           | Speaker grille, screw heads.                           |
+| **top plate**         | the bezel, +Z                                   | Screen side.                                           |
+| left / right          | +Y / −Y, looking at the display with the top up | USB-C is on the right wall.                            |
+| horizontal / vertical | along Y / along X                               | Device held in portrait.                               |
 
 The firmware draws the panel in portrait with +X up; the panel's FPC tail
 is then at the bottom.
 
 ## Stack (Z)
 
-| z (mm) | Layer |
-|---|---|
-| 0 → 1.6 | back wall (`floor_t`), speaker grille; locally 0 → 3.0 under the two screws |
-| 1.6 → 8.6 | battery (7.0); speaker (1.6 → 4.8) at the bottom end |
-| 8.6 → 8.9 | gap battery → PCB (`batt_gap` 0.3) |
-| 8.9 → 9.9 | PCB (`pcb_t` 1.0), every component on its back-facing side; tallest: JST-PH header 3.4 → 8.9, USB-C 5.7 → 8.9, module 5.8 → 8.9, inductor L1 5.9 → 8.9 |
-| 9.9 → 10.3 | foam pad, compressed (`disp_gap` 0.4) |
-| 10.3 → 11.3 | display panel (1.0) |
-| 11.3 → 12.5 | bezel (`bezel_t` 1.2), flush with the shell rim; its underside bears on the panel border (`top_gap` 0) |
+| z (mm)      | Layer                                                                                                                                                  |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0 → 1.6     | back wall (`floor_t`), speaker grille; locally 0 → 3.0 under the two screws                                                                            |
+| 1.6 → 8.6   | battery (7.0); speaker (1.6 → 4.8) at the bottom end                                                                                                   |
+| 8.6 → 8.9   | gap battery → PCB (`batt_gap` 0.3)                                                                                                                     |
+| 8.9 → 9.9   | PCB (`pcb_t` 1.0), every component on its back-facing side; tallest: JST-PH header 3.4 → 8.9, USB-C 5.7 → 8.9, module 5.8 → 8.9, inductor L1 5.9 → 8.9 |
+| 9.9 → 10.3  | foam pad, compressed (`disp_gap` 0.4)                                                                                                                  |
+| 10.3 → 11.3 | display panel (1.0)                                                                                                                                    |
+| 11.3 → 12.5 | bezel (`bezel_t` 1.2), flush with the shell rim; its underside bears on the panel border (`top_gap` 0)                                                 |
 
 The PCB rests on a 1.2 mm ledge (`ledge`) running along both long walls at
 z = 8.9, interrupted at the four switches and at the USB-C. The bezel drops
@@ -80,26 +80,26 @@ posts 5.8, speaker 14.0, a 9.9 mm zone for the tall parts, battery 30.0,
 `fpc_fold` comes out of the 9.9 mm zone (`models/pcb/README.md`, *Margins*).
 At 6.0 that zone is full.
 
-| Item | X range | Y range | Note |
-|---|---|---|---|
-| PCB | −43.15 → 36.8 | ±14.65 | one slot and two post holes, below |
-| Display outline | −37.4 → 21.8 | ±14.6 | FPC end at −X (bottom) |
-| Display active area | −29.45 → 19.10 | ±11.85 | from the panel drawing, see **Display window** |
-| Bezel window | −29.95 → 19.60 | ±12.35 | active area + 0.5 margin |
-| ESP32 module body | 17.3 → 36.8 | ±9.0 | on the PCB back side |
-| Antenna | 36.8 → 42.8 | ±9.0 | overhangs the PCB edge (PCB ends at 36.8) |
-| Battery | −13.2 → 16.8 | ±10.0 | on the floor; nothing can sit on the PCB above it |
-| Battery lead end (`G_BattPCM`) | −15.2 → −13.2 | ±10.0 | allowance, z 1.6 → 5.6 only; see Blocking 1 |
-| Speaker | −37.6 → −23.6 | ±10.0 | on the floor, 20 mm side along Y; grille 3 × 5 holes Ø1.5, pitch 3.0, centred under it |
-| USB-C | −23.22 → −14.28 | −15.9 → −8.75 | right wall, under the PCB, z 5.7 → 8.9; mouth 1.0 mm behind the wall's outer face (`usb_recess`) |
-| FPC slot in the PCB | −39.6 → −36.9 | −6.8 → 7.2 | `fpc_slot` 2.7 × `fpc_slot_w` 14.0, centred on the tail |
-| FPC connector | −31.7 → −26.1 | −7.35 → 7.75 | PCB back side, mouth toward the slot, 5.7 mm inboard of the panel end (`fpc_run`) |
-| JST-PH header | −23.1 → −15.2 | 4.2 → 11.8 | mouth toward −Y |
-| Inductor L1 (`G_L1`) | −36.55 → −32.55 | 9.1 → 13.1 | the one display-boost part taller than 1.35 mm |
-| Bezel posts / screws | x = −39.9 | y = ±11.5 | Ø4.0 posts through Ø4.4 PCB holes |
-| Bezel hooks | at the +X end wall | 6 → 12 on each side | plastic only |
-| Buttons | centred at x = ±8 | both long walls | openings 5.2 × 2.1 mm, z 6.9 → 9.0 |
-| Mic port | x = −41.375 | y = 0 | Ø1.0 through the bezel, in the strip below the display |
+| Item                           | X range            | Y range             | Note                                                                                             |
+| ------------------------------ | ------------------ | ------------------- | ------------------------------------------------------------------------------------------------ |
+| PCB                            | −43.15 → 36.8      | ±14.65              | one slot and two post holes, below                                                               |
+| Display outline                | −37.4 → 21.8       | ±14.6               | FPC end at −X (bottom)                                                                           |
+| Display active area            | −29.45 → 19.10     | ±11.85              | from the panel drawing, see **Display window**                                                   |
+| Bezel window                   | −29.95 → 19.60     | ±12.35              | active area + 0.5 margin                                                                         |
+| ESP32 module body              | 17.3 → 36.8        | ±9.0                | on the PCB back side                                                                             |
+| Antenna                        | 36.8 → 42.8        | ±9.0                | overhangs the PCB edge (PCB ends at 36.8)                                                        |
+| Battery                        | −13.2 → 16.8       | ±10.0               | on the floor; nothing can sit on the PCB above it                                                |
+| Battery lead end (`G_BattPCM`) | −15.2 → −13.2      | ±10.0               | allowance, z 1.6 → 5.6 only; see Blocking 1                                                      |
+| Speaker                        | −37.6 → −23.6      | ±10.0               | on the floor, 20 mm side along Y; grille 3 × 5 holes Ø1.5, pitch 3.0, centred under it           |
+| USB-C                          | −23.22 → −14.28    | −15.9 → −8.75       | right wall, under the PCB, z 5.7 → 8.9; mouth 1.0 mm behind the wall's outer face (`usb_recess`) |
+| FPC slot in the PCB            | −39.6 → −36.9      | −6.8 → 7.2          | `fpc_slot` 2.7 × `fpc_slot_w` 14.0, centred on the tail                                          |
+| FPC connector                  | −31.7 → −26.1      | −7.35 → 7.75        | PCB back side, mouth toward the slot, 5.7 mm inboard of the panel end (`fpc_run`)                |
+| JST-PH header                  | −23.1 → −15.2      | 4.2 → 11.8          | mouth toward −Y                                                                                  |
+| Inductor L1 (`G_L1`)           | −36.55 → −32.55    | 9.1 → 13.1          | the one display-boost part taller than 1.35 mm                                                   |
+| Bezel posts / screws           | x = −39.9          | y = ±11.5           | Ø4.0 posts through Ø4.4 PCB holes                                                                |
+| Bezel hooks                    | at the +X end wall | 6 → 12 on each side | plastic only                                                                                     |
+| Buttons                        | centred at x = ±8  | both long walls     | openings 5.2 × 2.1 mm, z 6.9 → 9.0                                                               |
+| Mic port                       | x = −41.375        | y = 0               | Ø1.0 through the bezel, in the strip below the display                                           |
 
 **Battery access:** by full split — two screws out, shell off, unplug the
 JST-PH from the PCB's back side.
@@ -200,12 +200,12 @@ The panel has no retention feature of its own. Closed, it is held between
 the bezel underside (contact) and the foam on the PCB, the PCB on its
 ledges; the hooks and screws are what keep that stack shut.
 
-| Feature | Body | Geometry |
-|---|---|---|
-| Posts ×2 | bezel | Ø4.0, z 3.1 → 11.3, pilot Ø1.7 × 7.2 deep (z 3.0 → 10.2); 1.5 mm from the end wall, 0.5 mm from the panel end |
-| Screw seats ×2 | shell | floor thickened to 3.0, Ø2.2 through, Ø4.2 × 1.8 counterbore from the back |
-| Hooks ×2 | bezel | tongue 1.2 × 6 × 2.0 under the plate, nose 0.9 mm into the wall, z 9.5 → 10.5 |
-| Hook pockets ×2 | shell | 1.0 deep × 6.6 × 1.35, z 9.3 → 10.65; 1.0 mm of wall left outside |
+| Feature                  | Body  | Geometry                                                                                                                     |
+| ------------------------ | ----- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Posts ×2                 | bezel | Ø4.0, z 3.1 → 11.3, pilot Ø1.7 × 7.2 deep (z 3.0 → 10.2); 1.5 mm from the end wall, 0.5 mm from the panel end                |
+| Screw seats ×2           | shell | floor thickened to 3.0, Ø2.2 through, Ø4.2 × 1.8 counterbore from the back                                                   |
+| Hooks ×2                 | bezel | tongue 1.2 × 6 × 2.0 under the plate, nose 0.9 mm into the wall, z 9.5 → 10.5                                                |
+| Hook pockets ×2          | shell | 1.0 deep × 6.6 × 1.35, z 9.3 → 10.65; 1.0 mm of wall left outside                                                            |
 | Screws ×2 (`G_Screw1/2`) | ghost | **M2 × 8 pan head Phillips machine screw**, B&F `MPMS 002 0008 PH` (DigiKey H739-ND); head Ø3.85 × 1.52, shank drawn at Ø1.6 |
 
 Screw choice: M2 rather than M1.6 — neither LCSC nor DigiKey lists a
@@ -227,11 +227,11 @@ from the antenna.
 
 Volumes and boxes (`measure`):
 
-| Body | Bounding box (mm) | Volume measured | Faces |
-|---|---|---|---|
-| `BottomShell` | 90.8 × 33.8 × 12.5 | 10 946.41 mm³ | 90, closed |
-| `Bezel` | 88.55 × 31.5 × 9.4 | 2 115.05 mm³ | 56, closed |
-| `G_PCB` | 79.95 × 29.3 × 1.0 | 2 274.32 mm³ | 12, closed |
+| Body          | Bounding box (mm)  | Volume measured | Faces      |
+| ------------- | ------------------ | --------------- | ---------- |
+| `BottomShell` | 90.8 × 33.8 × 12.5 | 10 946.41 mm³   | 90, closed |
+| `Bezel`       | 88.55 × 31.5 × 9.4 | 2 115.05 mm³    | 56, closed |
+| `G_PCB`       | 79.95 × 29.3 × 1.0 | 2 274.32 mm³    | 12, closed |
 
 `G_PCB` computed: 79.95 × 29.3 − 2.7 × 14.0 − 2 × π × 2.2² = 2 274.32 mm².
 The two printed bodies were not recomputed by hand. Solid-volume mass at
@@ -264,28 +264,28 @@ antenna volume (18 × 6 × 3.1 mm box), measured in 3D, in every direction —
 stricter than a sideways/forward-only reading. Distances from `G_Antenna`
 (`inspect.clearance`, exact faces):
 
-| To | Distance (mm) | |
-|---|---|---|
-| Display panel | **15.07** | governs `ant_keepout`; 0.07 mm of margin |
-| Battery | 20.00 | |
-| Switches SW1 / SW3 | 26.64 | |
-| AP2112K | 35.33 | |
-| Switches SW2 / SW4 | 42.61 | |
-| Battery lead end | 50.00 | |
-| MAX17048 | 50.80 | |
-| USB-C | 51.08 | |
-| JST-PH | 52.00 | |
-| TP4056 | 54.30 | |
-| Speaker | 60.41 | |
-| FPC connector | 62.90 | |
-| MAX98357A | 65.40 | |
-| FPC tail | 68.50 | |
-| Inductor L1 | 69.35 | |
-| Screws | 74.92 | |
-| Microphone | 76.85 | |
-| Module body, PCB edge | 0 | by construction; PCB stops at the antenna base line |
-| Bezel hook tongue (plastic) | 0.40 | above the antenna |
-| Shell end wall (plastic) | 0.60 | |
+| To                          | Distance (mm) |                                                     |
+| --------------------------- | ------------- | --------------------------------------------------- |
+| Display panel               | **15.07**     | governs `ant_keepout`; 0.07 mm of margin            |
+| Battery                     | 20.00         |                                                     |
+| Switches SW1 / SW3          | 26.64         |                                                     |
+| AP2112K                     | 35.33         |                                                     |
+| Switches SW2 / SW4          | 42.61         |                                                     |
+| Battery lead end            | 50.00         |                                                     |
+| MAX17048                    | 50.80         |                                                     |
+| USB-C                       | 51.08         |                                                     |
+| JST-PH                      | 52.00         |                                                     |
+| TP4056                      | 54.30         |                                                     |
+| Speaker                     | 60.41         |                                                     |
+| FPC connector               | 62.90         |                                                     |
+| MAX98357A                   | 65.40         |                                                     |
+| FPC tail                    | 68.50         |                                                     |
+| Inductor L1                 | 69.35         |                                                     |
+| Screws                      | 74.92         |                                                     |
+| Microphone                  | 76.85         |                                                     |
+| Module body, PCB edge       | 0             | by construction; PCB stops at the antenna base line |
+| Bezel hook tongue (plastic) | 0.40          | above the antenna                                   |
+| Shell end wall (plastic)    | 0.60          |                                                     |
 
 What this does **not** cover: the outside world. The outer wall is 7.9 mm
 from the antenna's sides and 2.6 mm from its tip, so a hand or a metal
@@ -302,44 +302,44 @@ face. Left at 15 here; it is one parameter if an RF test says otherwise.
 
 Smallest gaps, measured with `inspect.clearance {clearance: 2.6}`:
 
-| Pair | Gap (mm) | Comment |
-|---|---|---|
-| Bezel ↔ display top | 0 | contact by design; tolerance is taken by the foam, not by a gap |
-| JST-PH ↔ battery lead-end allowance | 0 | by construction: the header starts where the allowance ends |
-| Screw shank ↔ post pilot | 0.05 | radial; the thread is meant to cut into the post |
-| Hook nose ↔ pocket | 0.10 end, 0.15 above | from the feature dimensions; lets the top end lift 0.15 |
-| Bezel post ↔ PCB hole | 0.20 | radial |
-| USB-C ↔ battery lead-end allowance | 0.23 | allowance top z 5.6, receptacle from z 5.7 |
-| Display ↔ side walls | 0.30 | `fit` |
-| PCB ↔ battery | 0.30 | **no swelling allowance** for the Li-Po |
-| Switch body ↔ shell opening | 0.33 | |
-| USB-C shell ↔ opening | 0.35 | `usb_clr` |
-| PCB ↔ display | 0.40 | foam, compressed thickness, not chosen |
-| AP2112K ↔ battery, ↔ ledge wall | 0.40 | in the 3.7 mm strip beside the battery |
-| Battery ↔ module | 0.50 | `batt_mod_gap` |
-| Bezel post ↔ panel end | 0.50 | from the parameters |
-| Speaker ↔ JST-PH | 0.50 | along X |
-| Antenna ↔ end wall | 0.60 | |
-| Inductor L1 ↔ ledge wall | 0.60 | |
-| FPC tail ↔ slot edge | 0.64 | idealised tail |
-| Microphone ↔ end wall | 0.70 | |
-| FPC tail ↔ bezel underside | 0.70 | idealised tail |
-| Bezel post ↔ speaker | 0.75 | speaker drawn as a box; the real frame is oval |
-| Battery ↔ MAX17048 | 0.80 | |
-| Screw head ↔ speaker | 0.82 | |
-| TP4056 ↔ USB-C | 0.90 | |
-| Battery ↔ USB-C | 1.08 | |
-| Speaker top ↔ inductor L1 | 1.10 | vertical |
-| Battery ↔ switches | 1.20 | |
-| MAX98357A ↔ ledge wall | 1.20 | |
-| Bezel post ↔ inductor L1 | 1.35 | |
-| Speaker ↔ USB-C | 1.59 | |
-| FPC connector ↔ inductor L1 | 1.60 | |
-| Microphone ↔ FPC tail | 1.65 | |
-| Screw tip ↔ display | 1.77 | |
-| Battery ↔ JST-PH | 2.00 | filled by the lead-end allowance below z 5.6 |
-| Speaker top ↔ FPC connector | 2.10 | vertical |
-| Speaker ↔ TP4056 | 2.35 | |
+| Pair                                | Gap (mm)             | Comment                                                         |
+| ----------------------------------- | -------------------- | --------------------------------------------------------------- |
+| Bezel ↔ display top                 | 0                    | contact by design; tolerance is taken by the foam, not by a gap |
+| JST-PH ↔ battery lead-end allowance | 0                    | by construction: the header starts where the allowance ends     |
+| Screw shank ↔ post pilot            | 0.05                 | radial; the thread is meant to cut into the post                |
+| Hook nose ↔ pocket                  | 0.10 end, 0.15 above | from the feature dimensions; lets the top end lift 0.15         |
+| Bezel post ↔ PCB hole               | 0.20                 | radial                                                          |
+| USB-C ↔ battery lead-end allowance  | 0.23                 | allowance top z 5.6, receptacle from z 5.7                      |
+| Display ↔ side walls                | 0.30                 | `fit`                                                           |
+| PCB ↔ battery                       | 0.30                 | **no swelling allowance** for the Li-Po                         |
+| Switch body ↔ shell opening         | 0.33                 |                                                                 |
+| USB-C shell ↔ opening               | 0.35                 | `usb_clr`                                                       |
+| PCB ↔ display                       | 0.40                 | foam, compressed thickness, not chosen                          |
+| AP2112K ↔ battery, ↔ ledge wall     | 0.40                 | in the 3.7 mm strip beside the battery                          |
+| Battery ↔ module                    | 0.50                 | `batt_mod_gap`                                                  |
+| Bezel post ↔ panel end              | 0.50                 | from the parameters                                             |
+| Speaker ↔ JST-PH                    | 0.50                 | along X                                                         |
+| Antenna ↔ end wall                  | 0.60                 |                                                                 |
+| Inductor L1 ↔ ledge wall            | 0.60                 |                                                                 |
+| FPC tail ↔ slot edge                | 0.64                 | idealised tail                                                  |
+| Microphone ↔ end wall               | 0.70                 |                                                                 |
+| FPC tail ↔ bezel underside          | 0.70                 | idealised tail                                                  |
+| Bezel post ↔ speaker                | 0.75                 | speaker drawn as a box; the real frame is oval                  |
+| Battery ↔ MAX17048                  | 0.80                 |                                                                 |
+| Screw head ↔ speaker                | 0.82                 |                                                                 |
+| TP4056 ↔ USB-C                      | 0.90                 |                                                                 |
+| Battery ↔ USB-C                     | 1.08                 |                                                                 |
+| Speaker top ↔ inductor L1           | 1.10                 | vertical                                                        |
+| Battery ↔ switches                  | 1.20                 |                                                                 |
+| MAX98357A ↔ ledge wall              | 1.20                 |                                                                 |
+| Bezel post ↔ inductor L1            | 1.35                 |                                                                 |
+| Speaker ↔ USB-C                     | 1.59                 |                                                                 |
+| FPC connector ↔ inductor L1         | 1.60                 |                                                                 |
+| Microphone ↔ FPC tail               | 1.65                 |                                                                 |
+| Screw tip ↔ display                 | 1.77                 |                                                                 |
+| Battery ↔ JST-PH                    | 2.00                 | filled by the lead-end allowance below z 5.6                    |
+| Speaker top ↔ FPC connector         | 2.10                 | vertical                                                        |
+| Speaker ↔ TP4056                    | 2.35                 |                                                                 |
 
 Walls: 2.0 mm sides, 1.6 mm back, 1.0 mm rim lip. At the four corners the
 cavity is square inside a 4 mm outer radius, so the wall thins to 1.17 mm

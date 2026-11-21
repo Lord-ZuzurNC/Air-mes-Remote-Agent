@@ -8,3 +8,6 @@ __pycache__/
 *.lck
 *.lock
 .history/
+
+# Internal management of the project (like purchage, receiption etc)
+.project

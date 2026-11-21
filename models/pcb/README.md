@@ -12,13 +12,13 @@ the support passives are not placed — see **Blocking**.
 
 ## Files
 
-| File | Content |
-|---|---|
-| `kicad/gen_floorplan.py` | Writes the board file as text from the KiCad library footprints; holds every placement number and the pad-to-net table. Also asserts no courtyard bounding boxes overlap each other, the cut-outs or the rule areas, and prints the free area. |
-| `kicad/ara_floorplan.kicad_pcb` | Generated board (KiCad 10.0.6 format) |
-| `kicad/ara_floorplan.svg` | `kicad-cli pcb export svg` of Edge.Cuts, F.Cu, F.Fab, F.CrtYd, Dwgs.User, Cmts.User |
-| `kicad/drc_report.txt` | Full `kicad-cli pcb drc --severity-all` output |
-| `BOM_to_buy.md` | The shopping list: every part, order code, quantity for one unit |
+| File                            | Content                                                                                                                                                                                                                                        |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kicad/gen_floorplan.py`        | Writes the board file as text from the KiCad library footprints; holds every placement number and the pad-to-net table. Also asserts no courtyard bounding boxes overlap each other, the cut-outs or the rule areas, and prints the free area. |
+| `kicad/ara_floorplan.kicad_pcb` | Generated board (KiCad 10.0.6 format)                                                                                                                                                                                                          |
+| `kicad/ara_floorplan.svg`       | `kicad-cli pcb export svg` of Edge.Cuts, F.Cu, F.Fab, F.CrtYd, Dwgs.User, Cmts.User                                                                                                                                                            |
+| `kicad/drc_report.txt`          | Full `kicad-cli pcb drc --severity-all` output                                                                                                                                                                                                 |
+| `BOM_to_buy.md`                 | The shopping list: every part, order code, quantity for one unit                                                                                                                                                                               |
 
 Regenerate and check, from `kicad/`:
 
@@ -48,10 +48,10 @@ kicad-cli pcb drc --severity-all --output drc_report.txt ara_floorplan.kicad_pcb
 Rectangle 79.95 × 29.3 mm (case x −43.15 → 36.8, y ±14.65) with three
 internal cut-outs:
 
-| Cut-out | Region (case mm) | Purpose |
-|---|---|---|
-| Slot | x −39.6 → −36.9, y −6.8 → 7.2 (2.7 × 14) | the display FPC drops through it to J3; centred on the tail, 0.2 mm off the board centre |
-| Holes ×2 | Ø4.4 at (−39.9, ±11.5) | the bezel's screw posts pass through and locate the board |
+| Cut-out  | Region (case mm)                         | Purpose                                                                                  |
+| -------- | ---------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Slot     | x −39.6 → −36.9, y −6.8 → 7.2 (2.7 × 14) | the display FPC drops through it to J3; centred on the tail, 0.2 mm off the board centre |
+| Holes ×2 | Ø4.4 at (−39.9, ±11.5)                   | the bezel's screw posts pass through and locate the board                                |
 
 Area 2 274.3 mm². The +X edge is the antenna base line: the module's
 antenna (6 mm) overhangs the board entirely. Between the −X edge and the
@@ -66,29 +66,29 @@ ledge; the ledge is cut away at the four switches and at the USB-C.
 
 Case coordinates, mm. Rotation is KiCad's (counter-clockwise).
 
-| Ref | Part | Library footprint | x | y | Rot |
-|---|---|---|---|---|---|
-| U1 | ESP32-S3-WROOM-1-N16R8 | `RF_Module:ESP32-S3-WROOM-1` | 30.05 | 0 | 270 |
-| MK1 | ICS-43434 | `Sensor_Audio:InvenSense_ICS-43434-6_3.5x2.65mm` | −41.375 | −0.71 | 0 |
-| J1 | USB-C, charge-only, SHOU HAN TYPE-C 6P(073) | `Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal` — see Blocking 2 | −18.75 | −12.5 | 180 |
-| J2 | Battery header, JST S2B-PH-SM4-TB | `Connector_JST:JST_PH_S2B-PH-SM4-TB_1x02-1MP_P2.00mm_Horizontal` | −19.15 | 8.6 | 180 |
-| J3 | Display FPC, 24 × 0.5 mm, Hirose FH12A / FH12 | `Connector_FFC-FPC:Hirose_FH12-24S-0.5SH_1x24-1MP_P0.50mm_Horizontal` | −27.3 | 0.2 | 270 |
-| U2 | TP4056 | `Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm` | −20.5 | −5.4 | 0 |
-| U3 | MAX17048G+T10 | `Package_DFN_QFN:TDFN-8-1EP_2x2mm_P0.5mm_EP0.8x1.2mm` | −15.0 | −4.0 | 0 |
-| U4 | MAX98357AETE+T | `Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm` | −30.1 | −11.0 | 0 |
-| U5 | AP2112K-3.3TRG1 | `Package_TO_SOT_SMD:SOT-23-5` | 0 | 11.85 | 0 |
-| TP1, TP2 | speaker wire pads | `TestPoint:TestPoint_Pad_1.5x1.5mm` | −41.375 | ±6.5 | 0 |
-| SW1–SW4 | Alps SKRTLAE010 | `Button_Switch_SMD:SW_Push_1P1T-MP_NO_Horizontal_Alps_SKRTLAE010` | ±8.0 | ±12.55 | 0 / 180 |
-| L1 | 47 µH, Cenker CKCS4030-47uH/M | `Inductor_SMD:L_Cenker_CKCS4030` | −34.55 | 11.1 | 90 |
-| Q1 | Si1308EDL | `Package_TO_SOT_SMD:SOT-323_SC-70` | −27.7 | 10.4 | 0 |
-| R1 | 1 MΩ | `Resistor_SMD:R_0603_1608Metric` | −30.7 | 9.99 | 0 |
-| R2 | 2.2 Ω | `Resistor_SMD:R_0603_1608Metric` | −30.7 | 11.47 | 0 |
-| C4 | 4.7 µF / 25 V | `Capacitor_SMD:C_0603_1608Metric` | −34.55 | 7.72 | 0 |
-| D1, D2 | MBR0530T1G | `Diode_SMD:D_SOD-123` | −35.75, −33.4 | −11.35 | 90 |
-| D3 | MBR0530T1G | `Diode_SMD:D_SOD-123` | −34.55 | −7.85 | 0 |
-| C3 | 4.7 µF / 25 V | `Capacitor_SMD:C_0603_1608Metric` | −27.27 | −11.3 | 90 |
-| C2 | 1 µF / 25 V | `Capacitor_SMD:C_0603_1608Metric` | −25.2 | −11.3 | 90 |
-| C12, C11, C10, C5, C9, C7, C6 | 1 µF / 25 V | `Capacitor_SMD:C_0603_1608Metric` | −23.5 → −14.5, pitch 1.5 | −1.2 | 90 |
+| Ref                           | Part                                          | Library footprint                                                                       | x                        | y      | Rot     |
+| ----------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ | ------ | ------- |
+| U1                            | ESP32-S3-WROOM-1-N16R8                        | `RF_Module:ESP32-S3-WROOM-1`                                                            | 30.05                    | 0      | 270     |
+| MK1                           | ICS-43434                                     | `Sensor_Audio:InvenSense_ICS-43434-6_3.5x2.65mm`                                        | −41.375                  | −0.71  | 0       |
+| J1                            | USB-C, charge-only, SHOU HAN TYPE-C 6P(073)   | `Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x_6P_TopMnt_Horizontal` — see Blocking 2 | −18.75                   | −12.5  | 180     |
+| J2                            | Battery header, JST S2B-PH-SM4-TB             | `Connector_JST:JST_PH_S2B-PH-SM4-TB_1x02-1MP_P2.00mm_Horizontal`                        | −19.15                   | 8.6    | 180     |
+| J3                            | Display FPC, 24 × 0.5 mm, Hirose FH12A / FH12 | `Connector_FFC-FPC:Hirose_FH12-24S-0.5SH_1x24-1MP_P0.50mm_Horizontal`                   | −27.3                    | 0.2    | 270     |
+| U2                            | TP4056                                        | `Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm`                                  | −20.5                    | −5.4   | 0       |
+| U3                            | MAX17048G+T10                                 | `Package_DFN_QFN:TDFN-8-1EP_2x2mm_P0.5mm_EP0.8x1.2mm`                                   | −15.0                    | −4.0   | 0       |
+| U4                            | MAX98357AETE+T                                | `Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm`                                | −30.1                    | −11.0  | 0       |
+| U5                            | AP2112K-3.3TRG1                               | `Package_TO_SOT_SMD:SOT-23-5`                                                           | 0                        | 11.85  | 0       |
+| TP1, TP2                      | speaker wire pads                             | `TestPoint:TestPoint_Pad_1.5x1.5mm`                                                     | −41.375                  | ±6.5   | 0       |
+| SW1–SW4                       | Alps SKRTLAE010                               | `Button_Switch_SMD:SW_Push_1P1T-MP_NO_Horizontal_Alps_SKRTLAE010`                       | ±8.0                     | ±12.55 | 0 / 180 |
+| L1                            | 47 µH, Cenker CKCS4030-47uH/M                 | `Inductor_SMD:L_Cenker_CKCS4030`                                                        | −34.55                   | 11.1   | 90      |
+| Q1                            | Si1308EDL                                     | `Package_TO_SOT_SMD:SOT-323_SC-70`                                                      | −27.7                    | 10.4   | 0       |
+| R1                            | 1 MΩ                                          | `Resistor_SMD:R_0603_1608Metric`                                                        | −30.7                    | 9.99   | 0       |
+| R2                            | 2.2 Ω                                         | `Resistor_SMD:R_0603_1608Metric`                                                        | −30.7                    | 11.47  | 0       |
+| C4                            | 4.7 µF / 25 V                                 | `Capacitor_SMD:C_0603_1608Metric`                                                       | −34.55                   | 7.72   | 0       |
+| D1, D2                        | MBR0530T1G                                    | `Diode_SMD:D_SOD-123`                                                                   | −35.75, −33.4            | −11.35 | 90      |
+| D3                            | MBR0530T1G                                    | `Diode_SMD:D_SOD-123`                                                                   | −34.55                   | −7.85  | 0       |
+| C3                            | 4.7 µF / 25 V                                 | `Capacitor_SMD:C_0603_1608Metric`                                                       | −27.27                   | −11.3  | 90      |
+| C2                            | 1 µF / 25 V                                   | `Capacitor_SMD:C_0603_1608Metric`                                                       | −25.2                    | −11.3  | 90      |
+| C12, C11, C10, C5, C9, C7, C6 | 1 µF / 25 V                                   | `Capacitor_SMD:C_0603_1608Metric`                                                       | −23.5 → −14.5, pitch 1.5 | −1.2   | 90      |
 
 U4 and U5 use the footprints KiCad's own symbols for those parts point to
 (`Audio:MAX98357A`, `Regulator_Linear:AP2112K-3.3`). L1's footprint is the
@@ -113,12 +113,12 @@ TP1/TP2 are on the rail at the bottom edge, 3.8 mm from the speaker's end.
 
 Rule areas in the board file:
 
-| Name | Region (case mm) | Forbids |
-|---|---|---|
-| `ANT_KEEPOUT_A` / `_B` | x 21.8 → 36.8, \|y\| 9.75 → 14.65 | tracks, vias, pads, copper pour, footprints |
-| `BATTERY_NO_PARTS` | x −13.2 → 16.55, y ±10 | footprints (battery is 0.3 mm under the board) |
-| `FPC_TAIL_NO_PARTS` | x −36.9 → −32.2, y −6.05 → 6.45 | footprints (the tail runs 1.0–1.3 mm under the board) |
-| `JST_PLUG_NO_PARTS` | x −23.1 → −15.2, y 0.3 → 3.5 | footprints (mated plug, lead bend) |
+| Name                   | Region (case mm)                  | Forbids                                               |
+| ---------------------- | --------------------------------- | ----------------------------------------------------- |
+| `ANT_KEEPOUT_A` / `_B` | x 21.8 → 36.8, \|y\| 9.75 → 14.65 | tracks, vias, pads, copper pour, footprints           |
+| `BATTERY_NO_PARTS`     | x −13.2 → 16.55, y ±10            | footprints (battery is 0.3 mm under the board)        |
+| `FPC_TAIL_NO_PARTS`    | x −36.9 → −32.2, y −6.05 → 6.45   | footprints (the tail runs 1.0–1.3 mm under the board) |
+| `JST_PLUG_NO_PARTS`    | x −23.1 → −15.2, y 0.3 → 3.5      | footprints (mated plug, lead bend)                    |
 
 The antenna strips are the part of the 15 mm keep-out that falls on the
 board: the two bands beside the module body, back to 15 mm behind the
@@ -134,53 +134,53 @@ From the GDEY0213B74 specification, section 12 *Reference Circuit*
 specification's own; it has no C1 and no C8. Ten capacitors, not seven:
 C2, C4 and C11 are in the drawing as well.
 
-| Ref | Value | Between |
-|---|---|---|
-| C4 | 4.7 µF / 25 V | `+3V3` (L1's input side) and `GND` |
-| L1 | 47 µH, 500 mA | `+3V3` and `EPD_SW` |
-| Q1 | Si1308EDL | drain `EPD_SW`, gate `EPD_GDR`, source `EPD_RESE` |
-| R1 | 1 MΩ | `EPD_GDR` and `GND` |
-| R2 | 2.2 Ω | `EPD_RESE` and `GND` |
-| D3 | MBR0530 | anode `EPD_SW`, cathode `EPD_PREVGH` |
-| C5 | 1 µF / 25 V | `EPD_PREVGH` and `GND` |
-| C3 | 4.7 µF / 25 V | `EPD_SW` and `EPD_CP` |
-| D2 | MBR0530 | anode `EPD_CP`, cathode `GND` |
-| D1 | MBR0530 | cathode `EPD_CP`, anode `EPD_PREVGL` |
-| C11 | 1 µF / 25 V | `EPD_PREVGL` and `GND` |
-| C2 | 1 µF / 25 V | `EPD_VSH2` and `GND` |
-| C9 | 1 µF / 25 V | `EPD_VSH1` and `GND` |
-| C10 | 1 µF / 25 V | `EPD_VSL` and `GND` |
-| C12 | 1 µF / 25 V | `EPD_VCOM` and `GND` |
-| C7 | 1 µF / 25 V | `EPD_VDD` and `GND` |
-| C6 | 1 µF / 25 V | `+3V3` (VCI) and `GND` |
+| Ref | Value         | Between                                           |
+| --- | ------------- | ------------------------------------------------- |
+| C4  | 4.7 µF / 25 V | `+3V3` (L1's input side) and `GND`                |
+| L1  | 47 µH, 500 mA | `+3V3` and `EPD_SW`                               |
+| Q1  | Si1308EDL     | drain `EPD_SW`, gate `EPD_GDR`, source `EPD_RESE` |
+| R1  | 1 MΩ          | `EPD_GDR` and `GND`                               |
+| R2  | 2.2 Ω         | `EPD_RESE` and `GND`                              |
+| D3  | MBR0530       | anode `EPD_SW`, cathode `EPD_PREVGH`              |
+| C5  | 1 µF / 25 V   | `EPD_PREVGH` and `GND`                            |
+| C3  | 4.7 µF / 25 V | `EPD_SW` and `EPD_CP`                             |
+| D2  | MBR0530       | anode `EPD_CP`, cathode `GND`                     |
+| D1  | MBR0530       | cathode `EPD_CP`, anode `EPD_PREVGL`              |
+| C11 | 1 µF / 25 V   | `EPD_PREVGL` and `GND`                            |
+| C2  | 1 µF / 25 V   | `EPD_VSH2` and `GND`                              |
+| C9  | 1 µF / 25 V   | `EPD_VSH1` and `GND`                              |
+| C10 | 1 µF / 25 V   | `EPD_VSL` and `GND`                               |
+| C12 | 1 µF / 25 V   | `EPD_VCOM` and `GND`                              |
+| C7  | 1 µF / 25 V   | `EPD_VDD` and `GND`                               |
+| C6  | 1 µF / 25 V   | `+3V3` (VCI) and `GND`                            |
 
 Panel pins, and the J3 pad each lands on. J3 is turned so that its pad 1
 is at −Y; the panel's pin 1 is at +Y (left, seen from the front; the fold
 does not change that). FPC pin n is therefore on J3 pad 25 − n:
 
-| FPC pin | Name | Net | J3 pad |
-|---|---|---|---|
-| 1, 4 | NC | — | 24, 21 |
-| 2 | GDR | `EPD_GDR` | 23 |
-| 3 | RESE | `EPD_RESE` | 22 |
-| 5 | VSH2 | `EPD_VSH2` | 20 |
-| 6, 7 | TSCL, TSDA | — (open in the reference circuit) | 19, 18 |
-| 8 | BS | `GND` (4-wire SPI) | 17 |
-| 9 | BUSY | `EPD_BUSY` | 16 |
-| 10 | RES# | `EPD_RST` | 15 |
-| 11 | D/C# | `EPD_DC` | 14 |
-| 12 | CS# | `EPD_CS` | 13 |
-| 13 | SCL | `EPD_SCK` | 12 |
-| 14 | SDA | `EPD_MOSI` | 11 |
-| 15, 16 | VDDIO, VCI | `+3V3` | 10, 9 |
-| 17 | VSS | `GND` | 8 |
-| 18 | VDD | `EPD_VDD` | 7 |
-| 19 | VPP | — (open in the reference circuit) | 6 |
-| 20 | VSH1 | `EPD_VSH1` | 5 |
-| 21 | VGH | `EPD_PREVGH` | 4 |
-| 22 | VSL | `EPD_VSL` | 3 |
-| 23 | VGL | `EPD_PREVGL` | 2 |
-| 24 | VCOM | `EPD_VCOM` | 1 |
+| FPC pin | Name       | Net                               | J3 pad |
+| ------- | ---------- | --------------------------------- | ------ |
+| 1, 4    | NC         | —                                 | 24, 21 |
+| 2       | GDR        | `EPD_GDR`                         | 23     |
+| 3       | RESE       | `EPD_RESE`                        | 22     |
+| 5       | VSH2       | `EPD_VSH2`                        | 20     |
+| 6, 7    | TSCL, TSDA | — (open in the reference circuit) | 19, 18 |
+| 8       | BS         | `GND` (4-wire SPI)                | 17     |
+| 9       | BUSY       | `EPD_BUSY`                        | 16     |
+| 10      | RES#       | `EPD_RST`                         | 15     |
+| 11      | D/C#       | `EPD_DC`                          | 14     |
+| 12      | CS#        | `EPD_CS`                          | 13     |
+| 13      | SCL        | `EPD_SCK`                         | 12     |
+| 14      | SDA        | `EPD_MOSI`                        | 11     |
+| 15, 16  | VDDIO, VCI | `+3V3`                            | 10, 9  |
+| 17      | VSS        | `GND`                             | 8      |
+| 18      | VDD        | `EPD_VDD`                         | 7      |
+| 19      | VPP        | — (open in the reference circuit) | 6      |
+| 20      | VSH1       | `EPD_VSH1`                        | 5      |
+| 21      | VGH        | `EPD_PREVGH`                      | 4      |
+| 22      | VSL        | `EPD_VSL`                         | 3      |
+| 23      | VGL        | `EPD_PREVGL`                      | 2      |
+| 24      | VCOM       | `EPD_VCOM`                        | 1      |
 
 Where the parts are: the seven capacitors that hang on one panel pin each
 (C12, C11, C10, C5, C9, C7, C6) are in a row behind J3's pads.
@@ -195,19 +195,19 @@ are 10–14 mm from their diodes.
 Assigned to pads, not routed. Pin numbers come from KiCad's symbol library
 except where noted; the display's are in the section above.
 
-| Net | Pads |
-|---|---|
-| `I2S_BCLK` | U1.4 (IO4), U4.16 (BCLK), MK1.4 (SCK) |
-| `I2S_WS` | U1.5 (IO5), U4.14 (LRCLK), MK1.1 (WS) |
-| `I2S_DOUT` | U1.6 (IO6) → U4.1 (DIN) |
-| `I2S_DIN` | MK1.6 (SD) → U1.7 (IO7) |
-| `SPK_P`, `SPK_N` | U4.9 (OUTP) → TP1, U4.10 (OUTN) → TP2 |
-| `EPD_BUSY`, `EPD_CS`, `EPD_MOSI`, `EPD_SCK`, `EPD_DC`, `EPD_RST` | U1.17 (IO9), U1.18 (IO10), U1.19 (IO11), U1.20 (IO12), U1.21 (IO13), U1.22 (IO14) → J3 |
-| `EPD_GDR`, `EPD_RESE`, `EPD_SW`, `EPD_CP`, `EPD_PREVGH`, `EPD_PREVGL`, `EPD_VSH1`, `EPD_VSH2`, `EPD_VSL`, `EPD_VCOM`, `EPD_VDD` | see *Display boost circuit* |
-| `VBUS` | J1 A9/B9, U2.4 (VCC), U2.8 (CE) |
-| `VBAT` | J2.1, U2.5 (BAT), U3.2 (CELL), U3.3 (VDD), U4.7/8 (VDD), U5.1 (VIN), U5.3 (EN) |
-| `+3V3` | U5.5 (VOUT), U1.2, MK1.5, J3.9/10 (VCI, VDDIO), L1.1, C4.1, C6.1 |
-| `GND` | U1.1/40/41, MK1.2 (LR)/3, U2.3/9, U3.1/4/9, U4.3/11/15/17, U5.2, J1 A12/B12/shell, J2.2, J3.8/17, R1.2, R2.2, D2.1, one pad of each of C2, C4–C7, C9–C12 |
+| Net                                                                                                                             | Pads                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `I2S_BCLK`                                                                                                                      | U1.4 (IO4), U4.16 (BCLK), MK1.4 (SCK)                                                                                                                    |
+| `I2S_WS`                                                                                                                        | U1.5 (IO5), U4.14 (LRCLK), MK1.1 (WS)                                                                                                                    |
+| `I2S_DOUT`                                                                                                                      | U1.6 (IO6) → U4.1 (DIN)                                                                                                                                  |
+| `I2S_DIN`                                                                                                                       | MK1.6 (SD) → U1.7 (IO7)                                                                                                                                  |
+| `SPK_P`, `SPK_N`                                                                                                                | U4.9 (OUTP) → TP1, U4.10 (OUTN) → TP2                                                                                                                    |
+| `EPD_BUSY`, `EPD_CS`, `EPD_MOSI`, `EPD_SCK`, `EPD_DC`, `EPD_RST`                                                                | U1.17 (IO9), U1.18 (IO10), U1.19 (IO11), U1.20 (IO12), U1.21 (IO13), U1.22 (IO14) → J3                                                                   |
+| `EPD_GDR`, `EPD_RESE`, `EPD_SW`, `EPD_CP`, `EPD_PREVGH`, `EPD_PREVGL`, `EPD_VSH1`, `EPD_VSH2`, `EPD_VSL`, `EPD_VCOM`, `EPD_VDD` | see *Display boost circuit*                                                                                                                              |
+| `VBUS`                                                                                                                          | J1 A9/B9, U2.4 (VCC), U2.8 (CE)                                                                                                                          |
+| `VBAT`                                                                                                                          | J2.1, U2.5 (BAT), U3.2 (CELL), U3.3 (VDD), U4.7/8 (VDD), U5.1 (VIN), U5.3 (EN)                                                                           |
+| `+3V3`                                                                                                                          | U5.5 (VOUT), U1.2, MK1.5, J3.9/10 (VCI, VDDIO), L1.1, C4.1, C6.1                                                                                         |
+| `GND`                                                                                                                           | U1.1/40/41, MK1.2 (LR)/3, U2.3/9, U3.1/4/9, U4.3/11/15/17, U5.2, J1 A12/B12/shell, J2.2, J3.8/17, R1.2, R2.2, D2.1, one pad of each of C2, C4–C7, C9–C12 |
 
 Choices made here that a schematic has to confirm:
 
@@ -290,28 +290,28 @@ Courtyard-to-courtyard gaps, from the bounding boxes `gen_floorplan.py`
 prints. The placement is at its limit: in the list below 0.00 means the
 two courtyards share an edge.
 
-| Pair | Gap (mm) |
-|---|---|
-| D3 ↔ D1, D2, U4, J3, FPC slot | 0.00 |
-| U4 ↔ C3 | 0.00 |
-| J2 ↔ plug area | 0.00 |
-| J3 ↔ R1 | 0.01 |
-| R1 ↔ R2; C-row ↔ U2; C-row ↔ plug area | 0.02 |
-| Within the C-row | 0.04 |
-| J1 ↔ U2; J3 ↔ Q1; J3 ↔ U4; D1 ↔ D2; U4 ↔ D2 | 0.05 |
-| J3 ↔ C12; Q1 ↔ R1, R2; U3 ↔ C6, C7 | 0.07 |
-| J3 ↔ L1; J3 ↔ U2; L1 ↔ C4 | 0.10 |
-| L1 ↔ R1, R2 | 0.12 |
-| U5 ↔ battery area | 0.15 |
-| U2 ↔ U3; U3 ↔ battery area | 0.17 |
-| J1 ↔ J3; J1 ↔ battery area | 0.18 |
-| MK1 ↔ FPC slot; MK1 ↔ board edge | 0.20 |
-| J1 ↔ C2 | 0.35 |
-| Switch courtyard ↔ battery area; U1 body + 0.25 ↔ battery area | 0.50 |
-| TP1 / TP2 ↔ FPC slot | 0.52 |
-| J2 ↔ J3 | 0.55 |
-| D1 ↔ post hole | 0.80 |
-| L1 ↔ post hole | 0.90 |
+| Pair                                                           | Gap (mm) |
+| -------------------------------------------------------------- | -------- |
+| D3 ↔ D1, D2, U4, J3, FPC slot                                  | 0.00     |
+| U4 ↔ C3                                                        | 0.00     |
+| J2 ↔ plug area                                                 | 0.00     |
+| J3 ↔ R1                                                        | 0.01     |
+| R1 ↔ R2; C-row ↔ U2; C-row ↔ plug area                         | 0.02     |
+| Within the C-row                                               | 0.04     |
+| J1 ↔ U2; J3 ↔ Q1; J3 ↔ U4; D1 ↔ D2; U4 ↔ D2                    | 0.05     |
+| J3 ↔ C12; Q1 ↔ R1, R2; U3 ↔ C6, C7                             | 0.07     |
+| J3 ↔ L1; J3 ↔ U2; L1 ↔ C4                                      | 0.10     |
+| L1 ↔ R1, R2                                                    | 0.12     |
+| U5 ↔ battery area                                              | 0.15     |
+| U2 ↔ U3; U3 ↔ battery area                                     | 0.17     |
+| J1 ↔ J3; J1 ↔ battery area                                     | 0.18     |
+| MK1 ↔ FPC slot; MK1 ↔ board edge                               | 0.20     |
+| J1 ↔ C2                                                        | 0.35     |
+| Switch courtyard ↔ battery area; U1 body + 0.25 ↔ battery area | 0.50     |
+| TP1 / TP2 ↔ FPC slot                                           | 0.52     |
+| J2 ↔ J3                                                        | 0.55     |
+| D1 ↔ post hole                                                 | 0.80     |
+| L1 ↔ post hole                                                 | 0.90     |
 
 These are courtyards, not copper: none of the pairs produces a clearance
 error in DRC.
