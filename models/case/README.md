@@ -1,14 +1,15 @@
-# ARA — case (bottom shell + screen bezel) — v0
+# ARA — case (bottom shell + screen bezel + button caps) — v0
 
 **Status: geometry built and overlap-checked, not printed, not fit-tested.**
-Rectangular, 90.8 × 33.8 × 12.5 mm assembled. Two printable bodies and 23
-component ghosts in one SolidCraft design; `inspect.clearance` over all 25
-bodies reports no overlap. Five items are blocking before a print is worth
-doing — see **Blocking**.
+Rectangular, 90.8 × 33.8 × 12.5 mm assembled, 35.8 mm across the button
+caps. Three printable parts (shell, bezel, one button cap printed four
+times) and 23 component ghosts in one SolidCraft design;
+`inspect.clearance` over all 29 bodies reports no overlap. Four items are
+blocking before a print is worth doing — see **Blocking**.
 
 ![iso view](ara_case_iso.png)
 
-The iso view shows the right long wall (USB-C opening, two button openings)
+The iso view shows the right long wall (USB-C opening, two button caps)
 with the top end toward the lower right. Back face (top end to the right,
 speaker grille and the two screws at the bottom end):
 
@@ -18,10 +19,11 @@ speaker grille and the two screws at the bottom end):
 
 | File                                    | Content                                                                                         |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `ara_case.sc`                           | SolidCraft source: parameters, both printable bodies, all ghosts (`G_*`)                        |
+| `ara_case.sc`                           | SolidCraft source: parameters, shell, bezel, the four caps (`ButtonCap1`–`4`), all ghosts (`G_*`) |
 | `ara_bottom_shell.stl`                  | Bottom shell, as modelled (Z up, back face on the bed)                                          |
 | `ara_bezel.stl`                         | Screen bezel with its posts, hooks and panel stops, as modelled (flip to print front-face down) |
-| `ara_case_assembly.step`                | All 25 bodies, for import into other CAD                                                        |
+| `ara_button_cap.stl`                    | Button cap, as modelled (prints as it lies, no support); one shape, print 4                     |
+| `ara_case_assembly.step`                | All 29 bodies, for import into other CAD                                                        |
 | `ara_case_iso.png`, `ara_case_back.png` | Renders of the current model                                                                    |
 
 ## Axes and orientation words
@@ -48,7 +50,7 @@ is then at the bottom.
 | 0 → 1.6     | back wall (`floor_t`), speaker grille; locally 0 → 3.0 under the two screws                                                                            |
 | 1.6 → 8.6   | battery (7.0); speaker (1.6 → 4.8) at the bottom end                                                                                                   |
 | 8.6 → 8.9   | gap battery → PCB (`batt_gap` 0.3)                                                                                                                     |
-| 8.9 → 9.9   | PCB (`pcb_t` 1.0), every component on its back-facing side; tallest: JST-PH header 3.4 → 8.9, USB-C 5.7 → 8.9, module 5.8 → 8.9, inductor L1 5.9 → 8.9 |
+| 8.9 → 9.9   | PCB (`pcb_t` 1.0), every component on its back-facing side; tallest: JST-PH header 3.4 → 8.9, switches 5.6 → 8.9, USB-C 5.7 → 8.9, module 5.8 → 8.9, inductor L1 5.9 → 8.9 |
 | 9.9 → 10.3  | foam pad, compressed (`disp_gap` 0.4)                                                                                                                  |
 | 10.3 → 11.3 | display panel (1.0)                                                                                                                                    |
 | 11.3 → 12.5 | bezel (`bezel_t` 1.2), flush with the shell rim; its underside bears on the panel border (`top_gap` 0)                                                 |
@@ -98,7 +100,8 @@ At 6.0 that zone is full.
 | Inductor L1 (`G_L1`)           | −36.55 → −32.55    | 9.1 → 13.1          | the one display-boost part taller than 1.35 mm                                                   |
 | Bezel posts / screws           | x = −39.9          | y = ±11.5           | Ø4.0 posts through Ø4.4 PCB holes                                                                |
 | Bezel hooks                    | at the +X end wall | 6 → 12 on each side | plastic only                                                                                     |
-| Buttons                        | centred at x = ±8  | both long walls     | openings 5.2 × 2.1 mm, z 6.9 → 9.0                                                               |
+| Buttons                        | centred at x = ±8  | both long walls     | openings 5.2 × 3.6 mm, z 5.4 → 9.0; behind the outer 1.0 mm of wall a 7.0 mm wide flange pocket  |
+| Switches                       | ±5.75 → ±10.25     | ±11.2 → ±14.59      | PCB back side, z 5.6 → 8.9 (`sw_h` 3.3), stem toward the wall; beside the battery, not above it  |
 | Mic port                       | x = −41.375        | y = 0               | Ø1.0 through the bezel, in the strip below the display                                           |
 
 **Battery access:** by full split — two screws out, shell off, unplug the
@@ -154,6 +157,57 @@ wall the panel covers it. Same shell, same pads, different mounting.
 On the long wall the receptacle is no longer in series with the display
 FPC, which is where the 3.0 mm of length came from.
 
+## Button caps
+
+One shape, printed four times (`ButtonCap1`–`4`, at SW1–SW4). It is
+symmetric about both of its mid-planes, so the same part fits either wall
+and cannot go in upside down.
+
+| Part of the cap | Size (mm)                    | Where (cap 1, +Y wall, fully out)                     |
+| --------------- | ---------------------------- | ----------------------------------------------------- |
+| Flange          | 6.6 × 1.21 × 3.1             | x 4.7 → 11.3, y 14.69 → 15.9, z 5.6 → 8.7             |
+| Shaft and cap   | 4.8 × 2.0 × 3.1              | y 15.9 → 17.9: 1.0 in the wall, 1.0 proud (`cap_proud`) |
+| Whole           | 6.6 × 3.21 × 3.1, 54.52 mm³  |                                                       |
+
+The flange cannot sit inside the cavity as the shell stood: the switch
+body fills the opening's inner mouth (4.5 of its 5.2 mm, front face at
+y = 13.76 against the ledge face at 13.7), and its actuator tip is at
+y = 14.59, 0.31 mm from the wall. The flange is therefore in the wall. The
+shell has a pocket at each button (`BtnPocketA`–`D`): the opening is 7.0 mm
+wide instead of 5.2 (`cap_wing` 0.9 per side) from the cavity out to
+1.0 mm from the outer face (`cap_lip`). The 5.2 × 3.6 opening itself
+remains only through that last 1.0 mm. The flange's two 0.9 mm wings stop
+against the lip.
+
+Along its travel the cap floats between the lip and the actuator tip:
+0.10 mm (`cap_gap`) to the tip when fully out. Sliding clearance is 0.2 mm
+per side (`cap_clr`) in the opening and the pocket; in Z it is 0.2 below
+and 0.3 above, which keeps the cap 0.2 mm under the PCB plane.
+
+Opening and pocket are as tall as the switch, not as its stem. The body
+stands 3.3 mm off the board (z 5.6 → 8.9) and its front face is at
+y = 13.76, 0.06 mm past the ledge face: left in place below the opening,
+the ledge meets the body. Floor at z = 5.4, 0.2 mm under the body;
+ceiling at 9.0, 0.1 mm over the PCB plane (`btn_h = sw_h + 0.3`). The cap
+fills that height less its clearance: its back face covers z 5.6 → 8.7,
+the stem's 6.2 → 8.2 lies inside it, and its mid-height (7.15) is
+0.05 mm from the stem axis (7.2).
+
+Switch figures used: **4.5 × 3.4 × 3.3 mm, operating force 1.6 N, travel
+0.2 mm, side push** (Alps Alpine product page for the SKRTLAE010; its
+specification gives 1.6 ± 0.5 N and 0.2 +0.2/−0.1 mm). From the
+dimension drawing on that page: 3.3 mm is the height above the board,
+3.4 mm the depth with the stem; the stem is round, Ø2.0, its axis 1.7 mm
+above the board, 0.84 mm out of a 2.56 mm deep body. Alps' STEP model of
+the part measures the same. The ghost's 0.83 mm is the KiCad library
+footprint's fab layer. A press moves the cap 0.10 + 0.2 =
+0.3 mm: it is then still 0.7 mm proud, its back face 0.63 mm from the
+switch body, its flange 0.26 mm under the PCB edge with 0.2 mm of air.
+
+The cap goes in from inside the shell, before the shell is closed, and is
+then captive: lip outside, actuator inside, pocket floor below, pocket
+ceiling above.
+
 ## Display FPC routing
 
 The tail comes off the panel's bottom end, turns down through the PCB slot
@@ -190,8 +244,11 @@ The bezel carries everything; the bottom shell is the lid.
    side) once closed, and by nothing before that.
 3. Foam pad, then the PCB over the two bezel posts, tail through the slot
    into the connector. The posts fix the PCB in X and Y.
-4. Battery and speaker in the bottom shell, JST-PH plugged, speaker wires
-   on their pads.
+4. Battery and speaker in the bottom shell, the four button caps pushed
+   into their openings from inside, JST-PH plugged, speaker wires on their
+   pads. Until the shell is closed nothing holds a cap in but its own
+   weight, on the pocket floor or, shell inverted, on its ceiling: the
+   long walls have to stay upright, which the closing swing does.
 5. The two hook noses at the bezel's top end go into pockets in the
    shell's +X end wall; the shell swings closed and two screws go in from
    the back face, through the floor, into the posts.
@@ -229,20 +286,30 @@ Volumes and boxes (`measure`):
 
 | Body          | Bounding box (mm)  | Volume measured | Faces      |
 | ------------- | ------------------ | --------------- | ---------- |
-| `BottomShell` | 90.8 × 33.8 × 12.5 | 10 946.41 mm³   | 90, closed |
+| `BottomShell` | 90.8 × 33.8 × 12.5 | 10 790.41 mm³   | 106, closed |
+| `ButtonCap1`  | 6.6 × 3.21 × 3.1   | 54.52 mm³       | 10, closed |
 | `Bezel`       | 88.55 × 31.5 × 9.4 | 2 115.05 mm³    | 56, closed |
 | `G_PCB`       | 79.95 × 29.3 × 1.0 | 2 274.32 mm³    | 12, closed |
+| `G_SW1`       | 4.5 × 3.39 × 3.3   | 50.34 mm³       | 6, closed  |
 
 `G_PCB` computed: 79.95 × 29.3 − 2.7 × 14.0 − 2 × π × 2.2² = 2 274.32 mm².
-The two printed bodies were not recomputed by hand. Solid-volume mass at
-1.27 g/cm³ (PETG): 13.9 g shell, 2.7 g bezel.
+Cap computed: 6.6 × 1.21 × 3.1 + 4.8 × 2.0 × 3.1 = 54.52 mm³; the three
+other caps measure the same. The four button cuts (opening and pocket)
+computed: 4 × (5.2 × (1.2 × 3.5 + 2.0 × 3.6) + 1.8 × (1.2 × 3.5 +
+1.0 × 3.6)) = 293.28 mm³ off the shell; measured 293.28 (shell with the
+eight cuts suppressed: 11 083.69). Shell and bezel were not otherwise
+recomputed by hand. Solid-volume mass at 1.27 g/cm³ (PETG): 13.7 g
+shell, 2.7 g bezel, 0.07 g per cap.
 
-Overlap check, all 25 bodies (`inspect.clearance {}`), verbatim:
+Overlap check, all 29 bodies (`inspect.clearance {}`), verbatim:
 
 ```
-{"bodies":25,"near":[],"nearest":{},"overlaps":[],"pairs_checked":70,
- "pairs_pruned":230,"pairs_reused":33,"truncated":false,"unchecked":[]}
+{"bodies":29,"ms":498.847574,"near":[],"nearest":{},"overlaps":[],
+ "pairs_checked":78,"pairs_pruned":328,"pairs_reused":46,"truncated":false,
+ "unchecked":[]}
 ```
+
+The caps are modelled fully out, against the lip.
 
 Openings, checked with rays (`view.pick`): a ray along +Y at the USB-C
 centre (z = 7.3) reaches the receptacle mouth at y = −15.9 without touching
@@ -252,10 +319,19 @@ x = −5.35 reach the panel, rays at x = −30.4, 19.9 and 20.4 stop on the
 bezel.
 
 Parameter test (`check_parameters {ant_keepout: 10, batt_h: 8, post_d: 4.4,
-act_top: 3.2}`): `errors: []`, shell rebuilds to 86.2 × 33.8 × 13.5 mm,
-design restored. Ghost positions across the width (Y) are plain numbers;
-along the length they follow `cav_l`, except `G_AP2112K`, placed with
-plain numbers, and the switches, which follow `btn_x`.
+act_top: 3.2, sw_h: 3.0}`): `errors: []`, shell rebuilds to 86.2 × 33.8 ×
+13.5 mm, the switch ghosts to 3.0 mm under the raised board (z 6.9 → 9.9)
+and the caps to 2.8 mm, design restored. Ghost positions across the
+width (Y) are plain numbers; along the length they follow `cav_l`, except
+`G_AP2112K`, placed with plain numbers, and the switches, which follow
+`btn_x`. The switches' height is `sw_h`; openings, pockets and caps
+follow it through `btn_h`.
+
+Caps and pockets (`check_parameters {btn_x: 10, cap_clr: 0.3, cap_proud:
+1.5}`): `errors: []`, caps move to x = ±10 and rebuild to 6.4 × 3.71 ×
+2.9 mm, design restored. Across the width the cap's back face follows
+`sw_tip` (14.59), a parameter holding the ghosts' plain-number actuator
+position.
 
 ## Antenna keep-out
 
@@ -300,19 +376,24 @@ face. Left at 15 here; it is one parameter if an RF test says otherwise.
 
 ## Margins
 
-Smallest gaps, measured with `inspect.clearance {clearance: 2.6}`:
+Smallest gaps, measured with `inspect.clearance {clearance: 2.6}`; the
+button-cap rows with `{clearance: 0.6}`:
 
 | Pair                                | Gap (mm)             | Comment                                                         |
 | ----------------------------------- | -------------------- | --------------------------------------------------------------- |
 | Bezel ↔ display top                 | 0                    | contact by design; tolerance is taken by the foam, not by a gap |
 | JST-PH ↔ battery lead-end allowance | 0                    | by construction: the header starts where the allowance ends     |
+| Button cap flange ↔ pocket lip      | 0                    | contact by design: the cap is modelled fully out                |
 | Screw shank ↔ post pilot            | 0.05                 | radial; the thread is meant to cut into the post                |
+| Button cap ↔ switch actuator tip    | 0.10                 | `cap_gap`; against the ghost's 4.5 mm wide face                 |
 | Hook nose ↔ pocket                  | 0.10 end, 0.15 above | from the feature dimensions; lets the top end lift 0.15         |
 | Bezel post ↔ PCB hole               | 0.20                 | radial                                                          |
+| Button cap ↔ opening, ↔ pocket      | 0.20                 | `cap_clr`, from the parameters; 0.30 above the cap              |
+| Button cap ↔ PCB                    | 0.20                 | edge to edge, 0.04 across and 0.2 down                          |
+| Switch body ↔ pocket floor          | 0.20                 | under the body; the ledge is cut away over its whole height     |
 | USB-C ↔ battery lead-end allowance  | 0.23                 | allowance top z 5.6, receptacle from z 5.7                      |
 | Display ↔ side walls                | 0.30                 | `fit`                                                           |
 | PCB ↔ battery                       | 0.30                 | **no swelling allowance** for the Li-Po                         |
-| Switch body ↔ shell opening         | 0.33                 |                                                                 |
 | USB-C shell ↔ opening               | 0.35                 | `usb_clr`                                                       |
 | PCB ↔ display                       | 0.40                 | foam, compressed thickness, not chosen                          |
 | AP2112K ↔ battery, ↔ ledge wall     | 0.40                 | in the 3.7 mm strip beside the battery                          |
@@ -330,7 +411,7 @@ Smallest gaps, measured with `inspect.clearance {clearance: 2.6}`:
 | TP4056 ↔ USB-C                      | 0.90                 |                                                                 |
 | Battery ↔ USB-C                     | 1.08                 |                                                                 |
 | Speaker top ↔ inductor L1           | 1.10                 | vertical                                                        |
-| Battery ↔ switches                  | 1.20                 |                                                                 |
+| Battery ↔ switches                  | 1.20                 | across; the two overlap in height, z 5.6 → 8.6                  |
 | MAX98357A ↔ ledge wall              | 1.20                 |                                                                 |
 | Bezel post ↔ inductor L1            | 1.35                 |                                                                 |
 | Speaker ↔ USB-C                     | 1.59                 |                                                                 |
@@ -341,7 +422,8 @@ Smallest gaps, measured with `inspect.clearance {clearance: 2.6}`:
 | Speaker top ↔ FPC connector         | 2.10                 | vertical                                                        |
 | Speaker ↔ TP4056                    | 2.35                 |                                                                 |
 
-Walls: 2.0 mm sides, 1.6 mm back, 1.0 mm rim lip. At the four corners the
+Walls: 2.0 mm sides, 1.6 mm back, 1.0 mm rim lip, 1.0 mm outside each
+button pocket (0.9 mm wide each side of the opening). At the four corners the
 cavity is square inside a 4 mm outer radius, so the wall thins to 1.17 mm
 and the bezel seat narrows to 0.17 mm there (computed, not measured).
 
@@ -350,7 +432,8 @@ and the bezel seat narrows to 0.17 mm there (computed, not measured).
 1. **Battery size is the nominal one.** The ghost is 30 × 20 × 7 mm from
    `docs/DESIGN.md`. EEMB's own product page and the retail listing both
    give 20.5 × 32.0 × 7.3 mm (read from search results; neither says which
-   part of the 32 mm is full thickness). 20.5 mm fits (27.4 mm between the ledges). 7.3 mm uses the
+   part of the 32 mm is full thickness). 20.5 mm fits (27.4 mm between the
+   ledges, 22.4 mm between the switch bodies on either side of the cell). 7.3 mm uses the
    whole 0.3 mm gap under the PCB. The extra 2 mm of length is taken as the
    protection board and lead end: `G_BattPCM` reserves 2.0 mm past the
    cell's −X end up to z = 5.6, and nothing but the USB-C (0.23 mm above
@@ -362,13 +445,10 @@ and the bezel seat narrows to 0.17 mm there (computed, not measured).
    face a bottom-contact one. Both variants (Hirose FH12A / FH12) share
    one footprint and the same 5.6 × 15.1 × 2.0 mm ghost; both are on the
    shopping list. Look at the panel before soldering.
-3. **No button caps.** The switch is the Alps SKRTLAE010 (ghost 4.5 ×
-   3.39 × 1.65 mm). Its actuator tip stops 0.3 mm short of the cavity
-   wall; a cap/plunger has to bridge that and the 2.0 mm wall.
-4. **Screw thread in printed plastic is untested.** A machine screw in a
+3. **Screw thread in printed plastic is untested.** A machine screw in a
    Ø1.7 printed pilot, 6.7 mm engaged, in a Ø4.0 post: whether it holds
    and whether the post splits depends on the print.
-5. **USB-C shell legs.** The C668623 drawing recommends a 1.6 mm board;
+4. **USB-C shell legs.** The C668623 drawing recommends a 1.6 mm board;
    this one is 1.0 mm. The leg length is not dimensioned — scaled from the
    drawing it is about 1.0 mm, flush with the board's display side. If the
    legs come through they have to be trimmed: there is 0.4 mm to the panel.
@@ -376,11 +456,25 @@ and the bezel seat narrows to 0.17 mm there (computed, not measured).
 ## Unvalidated
 
 - Component heights for the JST-PH header (5.5), TP4056 (1.75), MAX17048
-  (0.75), AP2112K (1.45, the SOT-23-5 package maximum) and the switch
-  (1.65) are recalled datasheet values; KiCad's 3D models are not
-  installed on this machine to check them against. FPC connector (2.0),
-  USB-C (3.2), inductor (3.0) and MAX98357A (0.75) are from their
-  drawings or `docs/DESIGN.md`.
+  (0.75) and AP2112K (1.45, the SOT-23-5 package maximum) are recalled
+  datasheet values; KiCad's 3D models are not installed on this machine
+  to check them against. FPC connector (2.0), USB-C (3.2), inductor
+  (3.0), switch (3.3) and MAX98357A (0.75) are from their drawings or
+  `docs/DESIGN.md`.
+- Button caps: the 0.2 mm sliding fit and the 0.10 mm of free play are
+  nominal, not printed. A printed 3.1 mm cap in a 3.6 mm opening may bind
+  or rattle; `cap_clr` and `cap_gap` are the two numbers to tune.
+- The switch ghost is one 4.5 × 3.39 × 3.3 mm box: body and stem are not
+  modelled apart, so the 0.10 mm to the cap is to the box's front face,
+  and the real stem is Ø2.0 inside it. In Alps' STEP model the terminals
+  reach 0.15 mm further inboard than the body (3.55 mm deep overall);
+  the ghost stops at the body.
+- Alps asks for a flat keying face of Ø2 or more and at most 3° of tilt
+  (specification, D8 and D9). The cap's face is flat; its 0.5 mm of play
+  in Z over 3.21 mm of depth allows about 9°.
+- Nothing but the switch stops a cap pushed past its 0.3 mm: a fingertip
+  only meets the wall after 1.0 mm. The switch's stop strength is 30 N
+  for 15 s (specification, 7.4).
 - The display-boost parts other than L1 (diodes ≤ 1.35 mm, the rest
   lower) have no ghost. They sit under the board where the nearest thing
   below is the speaker, 4.1 mm down, or the floor.
@@ -398,11 +492,11 @@ and the bezel seat narrows to 0.17 mm there (computed, not measured).
   at the port; needs a gasket or a printed chimney.
 - Speaker has no gasket to the grille and no defined back volume.
 - 1.0 mm USB-C recess vs. plug engagement.
-- The ledge is interrupted for 9.64 mm at the USB-C, 3.3 mm from the lower
-  right switch's 5.2 mm interruption.
+- The ledge is interrupted for 9.64 mm at the USB-C, 2.43 mm from the lower
+  right switch's 7.0 mm interruption (5.2 mm before the cap pockets).
 - Printability: the USB opening is a 9.64 mm bridge with rounded ends in a
-  3.2 mm thick wall section, the button openings 5.2 mm, the hook pockets
-  6.6 mm; the rim lip is 1.0 mm (2 perimeters at 0.4 mm); the posts are
+  3.2 mm thick wall section, the button pockets 7.0 mm (5.2 mm in the
+  outer 1.0 mm) over a 3.6 mm tall cut, the hook pockets 6.6 mm; the rim lip is 1.0 mm (2 perimeters at 0.4 mm); the posts are
   8.2 mm tall on a 1.2 mm plate.
 
 ## Recommended tests
@@ -410,18 +504,21 @@ and the bezel seat narrows to 0.17 mm there (computed, not measured).
 1. Calliper the real battery (length with its protection board, thickness)
    and look at the panel's FPC contacts; set `batt_l`, `batt_h`, pick the
    connector variant, re-run the clearance check.
-2. Print both bodies in PETG; check bezel fit in the rabbet (0.15 mm/side),
-   that the hooks engage and the case swings closed with the posts
-   clearing the end wall, and that the PCB ledge prints clean without
-   support.
-3. Drive the two M2 × 8 screws into printed posts, several times; check
+2. Print shell, bezel and four caps in PETG; check bezel fit in the rabbet
+   (0.15 mm/side), that the hooks engage and the case swings closed with
+   the posts clearing the end wall, and that the PCB ledge prints clean
+   without support. Check that each cap slides freely in its opening and
+   that the pocket ceiling bridged without sagging onto it.
+3. With a populated board in: every button clicks, returns, and does not
+   click when the case is squeezed across its width.
+4. Drive the two M2 × 8 screws into printed posts, several times; check
    they hold and the posts do not split. Reprint the pilot at Ø1.6 or Ø1.8
    if not.
-4. Dry-fit battery, speaker, the JST-PH plug with its leads, and a USB-C
+5. Dry-fit battery, speaker, the JST-PH plug with its leads, and a USB-C
    plug through the opening.
-5. Fold a real panel's tail through a 2.7 mm slot in a scrap board and
+6. Fold a real panel's tail through a 2.7 mm slot in a scrap board and
    check it reaches a connector 5.7 mm inboard without strain.
-6. RF: RSSI at a fixed distance with the display in place, then with the
+7. RF: RSSI at a fixed distance with the display in place, then with the
    module slid 5 and 10 mm toward the display, to decide whether
    `ant_keepout` can come down; repeat with the +X end held in a fist.
 

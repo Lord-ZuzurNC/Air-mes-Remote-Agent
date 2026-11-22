@@ -1,28 +1,44 @@
 ** Drc report for ara_floorplan.kicad_pcb **
-** Created on 2026-11-21T21:03:29 **
+** Created on 2026-11-22T00:51:51 **
 ** Report includes: Errors, Warnings, Exclusions **
 
 ** Found 33 DRC violations **
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
     Rule: configuration des contraintes des trous; error
-    @(106.7750 mm, 111.6500 mm): Pad 1 [<no net>] de SW1 sur F.Cu
-    @(105.8750 mm, 112.5500 mm): Pad Non Métallisé de SW1
+    @(109.2250 mm, 88.3500 mm): Pad 1 [<no net>] de SW3 sur F.Cu
+    @(110.1250 mm, 87.4500 mm): Pad Non Métallisé de SW3
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
     Rule: configuration des contraintes des trous; error
-    @(106.1500 mm, 113.6000 mm): Pad MP [<no net>] de SW1 sur F.Cu
-    @(105.8750 mm, 112.5500 mm): Pad Non Métallisé de SW1
+    @(109.8500 mm, 86.4000 mm): Pad MP [<no net>] de SW3 sur F.Cu
+    @(110.1250 mm, 87.4500 mm): Pad Non Métallisé de SW3
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
     Rule: configuration des contraintes des trous; error
-    @(109.2250 mm, 111.6500 mm): Pad 1 [<no net>] de SW1 sur F.Cu
-    @(110.1250 mm, 112.5500 mm): Pad Non Métallisé de SW1
+    @(90.7750 mm, 111.6500 mm): Pad 1 [<no net>] de SW2 sur F.Cu
+    @(89.8750 mm, 112.5500 mm): Pad Non Métallisé de SW2
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(106.7750 mm, 88.3500 mm): Pad 1 [<no net>] de SW3 sur F.Cu
+    @(105.8750 mm, 87.4500 mm): Pad Non Métallisé de SW3
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(106.1500 mm, 86.4000 mm): Pad MP [<no net>] de SW3 sur F.Cu
+    @(105.8750 mm, 87.4500 mm): Pad Non Métallisé de SW3
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
+    Rule: configuration des contraintes des trous; error
+    @(93.2250 mm, 111.6500 mm): Pad 1 [<no net>] de SW2 sur F.Cu
+    @(94.1250 mm, 112.5500 mm): Pad Non Métallisé de SW2
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(90.1500 mm, 113.6000 mm): Pad MP [<no net>] de SW2 sur F.Cu
+    @(89.8750 mm, 112.5500 mm): Pad Non Métallisé de SW2
+[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
+    Rule: configuration des contraintes des trous; error
+    @(93.8500 mm, 113.6000 mm): Pad MP [<no net>] de SW2 sur F.Cu
+    @(94.1250 mm, 112.5500 mm): Pad Non Métallisé de SW2
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
     Rule: configuration des contraintes des trous; error
     @(93.2250 mm, 88.3500 mm): Pad 1 [<no net>] de SW4 sur F.Cu
     @(94.1250 mm, 87.4500 mm): Pad Non Métallisé de SW4
-[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
-    Rule: configuration des contraintes des trous; error
-    @(109.8500 mm, 113.6000 mm): Pad MP [<no net>] de SW1 sur F.Cu
-    @(110.1250 mm, 112.5500 mm): Pad Non Métallisé de SW1
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
     Rule: configuration des contraintes des trous; error
     @(93.8500 mm, 86.4000 mm): Pad MP [<no net>] de SW4 sur F.Cu
@@ -37,36 +53,20 @@
     @(89.8750 mm, 87.4500 mm): Pad Non Métallisé de SW4
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
     Rule: configuration des contraintes des trous; error
-    @(109.2250 mm, 88.3500 mm): Pad 1 [<no net>] de SW3 sur F.Cu
-    @(110.1250 mm, 87.4500 mm): Pad Non Métallisé de SW3
+    @(106.7750 mm, 111.6500 mm): Pad 1 [<no net>] de SW1 sur F.Cu
+    @(105.8750 mm, 112.5500 mm): Pad Non Métallisé de SW1
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
     Rule: configuration des contraintes des trous; error
-    @(109.8500 mm, 86.4000 mm): Pad MP [<no net>] de SW3 sur F.Cu
-    @(110.1250 mm, 87.4500 mm): Pad Non Métallisé de SW3
+    @(106.1500 mm, 113.6000 mm): Pad MP [<no net>] de SW1 sur F.Cu
+    @(105.8750 mm, 112.5500 mm): Pad Non Métallisé de SW1
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
     Rule: configuration des contraintes des trous; error
-    @(106.7750 mm, 88.3500 mm): Pad 1 [<no net>] de SW3 sur F.Cu
-    @(105.8750 mm, 87.4500 mm): Pad Non Métallisé de SW3
+    @(109.2250 mm, 111.6500 mm): Pad 1 [<no net>] de SW1 sur F.Cu
+    @(110.1250 mm, 112.5500 mm): Pad Non Métallisé de SW1
 [hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
     Rule: configuration des contraintes des trous; error
-    @(106.1500 mm, 86.4000 mm): Pad MP [<no net>] de SW3 sur F.Cu
-    @(105.8750 mm, 87.4500 mm): Pad Non Métallisé de SW3
-[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
-    Rule: configuration des contraintes des trous; error
-    @(90.7750 mm, 111.6500 mm): Pad 1 [<no net>] de SW2 sur F.Cu
-    @(89.8750 mm, 112.5500 mm): Pad Non Métallisé de SW2
-[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,0993 mm)
-    Rule: configuration des contraintes des trous; error
-    @(93.2250 mm, 111.6500 mm): Pad 1 [<no net>] de SW2 sur F.Cu
-    @(94.1250 mm, 112.5500 mm): Pad Non Métallisé de SW2
-[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
-    Rule: configuration des contraintes des trous; error
-    @(90.1500 mm, 113.6000 mm): Pad MP [<no net>] de SW2 sur F.Cu
-    @(89.8750 mm, 112.5500 mm): Pad Non Métallisé de SW2
-[hole_clearance]: Violation d'isolation des trous (configuration des contraintes des trous isolation 0,2500 mm; réel 0,1500 mm)
-    Rule: configuration des contraintes des trous; error
-    @(93.8500 mm, 113.6000 mm): Pad MP [<no net>] de SW2 sur F.Cu
-    @(94.1250 mm, 112.5500 mm): Pad Non Métallisé de SW2
+    @(109.8500 mm, 113.6000 mm): Pad MP [<no net>] de SW1 sur F.Cu
+    @(110.1250 mm, 112.5500 mm): Pad Non Métallisé de SW1
 [drill_out_of_range]: Taille du trou en dehors de la plage (configuration des contraintes du PCB trou min 0,3000 mm ; réel 0,2000 mm)
     Rule: configuration des contraintes du PCB; error
     @(128.2900 mm, 97.1000 mm): Pad métallisé 41 [GND] de U1

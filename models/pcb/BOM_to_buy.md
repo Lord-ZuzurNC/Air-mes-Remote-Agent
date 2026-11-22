@@ -27,7 +27,7 @@ the display (Good Display's own shop) and the board itself (a PCB fab).
 | A7  | J2                                | Battery header                        | `S2B-PH-SM4-TB(LF)(SN)` (JST)             | PH 2.0 mm, 2-pin, side entry, SMT                         | 1   | C295747  | $0.21, lot of 5                        |
 | A8  | J3                                | Display FPC connector, top contact    | `FH12A-24S-0.5SH(55)` (Hirose)            | 24-pin, 0.5 mm, horizontal SMT, 2.0 mm high               | 1   | C506794  | $0.83                                  |
 | A9  | J3                                | Display FPC connector, bottom contact | `FH12-24S-0.5SH(55)` (Hirose)             | same footprint as A8                                      | 1   | C202112  | $0.52                                  |
-| A10 | SW1–SW4                           | Side-push tactile switch              | `SKRTLAE010` (Alps Alpine)                | 4.5 × 3.4 × 1.65 mm SMT                                   | 4   | C110293  | $0.15, lot of 5                        |
+| A10 | SW1–SW4                           | Side-push tactile switch              | `SKRTLAE010` (Alps Alpine)                | 4.5 × 3.4 × 3.3 mm SMT                                    | 4   | C110293  | $0.15, lot of 5                        |
 | A11 | L1                                | Boost inductor 47 µH                  | `CKCS4030-47uH/M` (CENKER)                | 4.0 × 4.0 × 3.0 mm; Isat 0.95 A, Irms 0.72 A, DCR 0.445 Ω | 1   | C354593  | $0.05, lot of 10                       |
 | A12 | Q1                                | Boost MOSFET, N-channel               | `SI1308EDL-T1-GE3` (Vishay)               | SC-70-3 (SOT-323)                                         | 1   | C469327  | $0.26, lot of 5                        |
 | A13 | D1–D3                             | Schottky 30 V / 0.5 A                 | `MBR0530T1G` (onsemi)                     | SOD-123                                                   | 3   | C82046   | $0.06, lot of 10                       |
@@ -81,7 +81,6 @@ until there is a schematic** (`models/pcb/README.md`, Blocking 1). All
   material and free thickness not chosen (`models/case/README.md`).
 - **Speaker leads**: two wires about 15 mm, from the speaker's solder pads
   to TP1/TP2. Any 28–30 AWG wire.
-- **Button caps**: not designed (`models/case/README.md`, Blocking 3).
 - **Mic gasket**, **speaker gasket**: not designed.
 
 ## Blocking
