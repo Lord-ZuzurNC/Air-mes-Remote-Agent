@@ -7,14 +7,15 @@ Source of truth for this project. The general registry (`projets.md`, skill
 
 - **No direct device-to-PC BLE link.** Topology:
   `device --BLE--> relay --internet--> PC/Hermes`.
-- **Voice never travels over BLE.** STT runs locally on the device (speech →
-  text), only text crosses BLE and then the internet. Reply text → local
-  TTS on the device.
+- **STT and TTS run on the phone, not on the device** (Lord, 2026-11-24).
+  The device is a BLE audio terminal: microphone audio goes out, reply
+  audio comes in. Only text crosses the internet. No speech model and no
+  speech synthesiser in the firmware. Pipeline: see *Audio pipeline*.
 - **Talk button is push-to-talk only.** No toggle mode in v1.
 - **Intended use: real remote access**, not just the local network.
-- **BLE link to the relay must be as low-power as possible** while staying
-  reliable enough for a real-time text link (Lord, 2026-11-09). Full BLE
-  design: see the dedicated section below.
+- **BLE link to the relay must be as low-power as possible** while
+  carrying real-time audio in both directions during an exchange. Full
+  BLE design: see the dedicated section below.
 - **Relay = companion app on Lord's Android phone**, not a dedicated fixed
   hub (2026-11-09). A fixed hub can only reach the pendant within BLE range
   (~10-30 m), which would contradict the "real remote access, not just
@@ -33,18 +34,54 @@ Biggest standby power lever — no radio running while idle.
 
 **Connection:** once connected, the link stays up for a session (until
 Power long-press or an inactivity timeout). Long connection interval by
-default to save power; the device requests a shorter interval (connection
-parameter update) while Talk is active, for latency, then reverts to the
-long interval afterwards.
+default to save power; the device requests a short interval (connection
+parameter update, 15 ms target) from the Talk press until the reply has
+finished playing, then reverts to the long interval. A parameter update
+only takes effect several connection events later, at the old interval:
+the device buffers microphone audio from the press and catches up once
+the short interval is in place (*Audio pipeline*).
 
 **GATT profile:** a custom service, not a standard one:
-- a **Notify** characteristic, device → phone: STT-recognised text.
-- a **Write** characteristic, phone → device: the reply text to speak.
-- a **status** characteristic: battery level, mic muted/active.
+- **audio up** — Notify, device → phone: microphone audio frames.
+- **audio down** — Write Without Response, phone → device: reply audio
+  frames.
+- **control** — Write + Notify: talk start/stop, stop/abort, codec id,
+  and the device's receive credits for audio down (the flow control that
+  makes Write Without Response safe).
+- **status** — Read + Notify: battery level, mic muted/active.
 
-**MTU:** negotiate a high ATT MTU (up to ~517 B, supported by most recent
-Android phones) so a full sentence goes out in one radio transaction
-instead of being fragmented — fewer radio events, less power.
+**MTU and packet length:** ATT MTU of 247 B or more, with LE Data Length
+Extension (251 B link-layer payload). One audio frame is 244 B, sized to
+travel in exactly one link-layer packet; a higher MTU (up to 517 B) is
+accepted but brings nothing for audio. Without Data Length Extension the
+link cannot carry the audio (see the numbers below): the device reports an
+error instead of streaming.
+
+**PHY:** 2M requested, 1M accepted. The budget below is made on 1M.
+
+**Link budget — numbers, not measured on this hardware:**
+
+| Quantity                                                                    | Value                 | Source                                                                                         |
+| --------------------------------------------------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------- |
+| Audio stream, each direction (never both at once)                           | 65 kbit/s (8.1 kB/s)  | 33.3 frames/s × 244 B, see *Audio pipeline*                                                    |
+| ESP32-S3 ↔ ESP32-S3, notify, 1M PHY                                         | ~755 kbit/s           | Espressif, `examples/bluetooth/nimble/throughput_app`: shield box, 7.5 ms interval, MTU 512, DLE 251 |
+| same, write                                                                 | ~753 kbit/s           | same                                                                                           |
+| same, 2M PHY                                                                | ~1.35 / ~1.34 Mbit/s  | same                                                                                           |
+| Floor: one 244 B packet per 15 ms connection event                          | 130 kbit/s            | arithmetic                                                                                     |
+| No Data Length Extension: 4–6 packets of 20 B per 15 ms event               | 43–64 kbit/s          | arithmetic                                                                                     |
+| Raw PCM 16 kHz / 16 bit, for comparison                                     | 256 kbit/s            | arithmetic                                                                                     |
+
+The stream uses 8.6 % of what Espressif measured between two ESP32-S3 and
+50 % of the one-packet-per-event floor. Raw PCM would use 34 % of the
+measured figure and does not fit under the floor. **Not measured: the
+throughput between this module and an Android phone.** Android grants
+11.25–15 ms under `CONNECTION_PRIORITY_HIGH` and decides itself how many
+packets fit in an event; no published ESP32-S3 ↔ Android figure was found.
+
+**Latency:** a frame is 30 ms of audio and waits at most one connection
+interval (15 ms): the phone is under 50 ms behind the microphone, so when
+Talk is released the utterance is already on the phone. Reply playback
+starts once 5 frames (150 ms) are buffered on the device.
 
 **Security:** LE Secure Connections with **numeric comparison pairing**
 (the device's screen can show the 6-digit code) rather than Just Works,
@@ -124,60 +161,112 @@ part, not embeddable on a custom PCB via FPC/ZIF. Corrected to the bare
 
 ## MCU — decided
 
-**ESP32-S3-WROOM-1-N16R8** (16 MB quad-SPI flash + 8 MB octal-SPI PSRAM,
-that exact variant; 36 usable GPIO, -40 to 85 °C).
+**ESP32-S3-WROOM-1-N16R8** (16 MB quad-SPI flash + 8 MB octal-SPI PSRAM;
+18 × 25.5 × 3.1 mm, PCB antenna). Per Espressif's module datasheet: 33
+usable GPIO on this variant (IO35, IO36, IO37 are taken by the octal
+PSRAM; the floorplan uses none of them) and −40 to 65 °C ambient (85 °C
+only with PSRAM ECC enabled, which costs 1/16 of the PSRAM).
 
-Chosen over ESP32-S3-WROOM-2-N32R16V (32 MB flash + 16 MB PSRAM, both
-octal, 33 GPIO, -40 to 65 °C only): the extra memory isn't needed —
-`lokutor-ai/oido`, the STT engine this project targets, is developed and
-benchmarked on this exact WROOM-1-N16R8 board, and its latest version runs
-its model entirely from flash, leaving the 8 MB PSRAM free. The WROOM-2's
-extra headroom would cost 3 GPIO, a narrower thermal range, and a bigger,
-pricier module for no concrete current need. Revisit only if the project
-later needs several languages loaded at once, a separate wake-word engine
-alongside full STT, or heavy local audio caching.
+**It is larger than the firmware needs.** With no speech model on the
+device, the load is the BLE stack, two audio buffers, the display driver,
+four buttons and the fuel gauge:
 
-Open-vocabulary embedded STT is feasible on this chip: `lokutor-ai/oido`
-(quantised Conformer-CTC Small, 3.7% WER on LibriSpeech test-clean, runs on
-the two Xtensa LX7 cores at 240 MHz, no cloud).
+| Resource                   | Need                                                                                                                                                         | N16R8 has            | Smallest variant that fits            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------- | ------------------------------------- |
+| Flash                      | two OTA application slots (firmware update is over BLE) + NVS/bonding data + character sprites. Application estimated under 1.5 MB (ESP-IDF, NimBLE, drivers); a full 250×122 frame at 2 bit/px is 7.6 kB | 16 MB                | 4 MB (two 1.9 MB slots); 8 MB with room |
+| RAM, audio up              | 3 s of ADPCM held while the connection interval switches: 24 kB                                                                                              | 512 kB SRAM in the chip | internal SRAM                         |
+| RAM, audio down            | 2 s of ADPCM: 16 kB; I2S DMA and one decoded frame: under 8 kB                                                                                               | same                 | internal SRAM                         |
+| RAM, display               | two 1-bit planes of 250×122 (SSD1680): 2 × 4 kB, plus one working copy                                                                                       | same                 | internal SRAM                         |
+| RAM, BLE stack, RTOS, tasks | estimated 100–150 kB (one connection, peripheral role only)                                                                                                  | same                 | internal SRAM                         |
+| PSRAM                      | none                                                                                                                                                         | 8 MB                 | no PSRAM                              |
 
-Caveats:
+The buffer sizes are arithmetic from the audio format; the application
+size and the stack's RAM are estimates, not a build — there is no
+firmware yet. Even at twice those estimates the total stays inside
+512 kB of SRAM and a 4 MB flash.
 
-- **Not real-time yet, upstream (software, not a hardware decision point):**
-  per the project's own status notes, a 4-second utterance takes about
-  8.7 s to come back as text on one core; two-core mode mis-transcribes on
-  real silicon and is disabled. Streaming mode roughly halves that delay.
-  Doesn't change any hardware pick made here — revisit in the UX/flow
-  topic (how the device signals "thinking" during that wait).
-- **Oído's firmware is GPL-3.0** (models are CC-BY/CC-BY-SA). Bundling it
-  into the device firmware would likely make the whole firmware inherit the
-  GPL. To settle alongside the project's overall licence choice.
-
-Local TTS: eSpeak-ng or Flite. Robotic-sounding but good enough to read a
-reply aloud.
+**Kept anyway.** `ESP32-S3-WROOM-1-N4` or `-N8` (no PSRAM) would be
+enough. Every `ESP32-S3-WROOM-1` variant has the same outline, land
+pattern and pinout, so the choice changes neither the board nor the case;
+the N16R8 is a superset except for the three GPIO and the temperature
+range above. What it costs: about 1.5 € per module over an N4 (Mouser list prices, 2026-11), and 140 µA
+more in light sleep for the 8 MB PSRAM (Espressif's ESP32-S3 datasheet,
+table 5-10 note). What it gives: a whole reply can be buffered on the
+device (60 s of ADPCM is 480 kB), and OTA slots are never tight. The
+firmware must not depend on PSRAM, so that a build on an N4/N8 works.
 
 ## Audio — decided, one reserve
 
-**Microphone: single digital MEMS mic (I2S or PDM), 16 kHz mono.** Not
-analog electret (noisier, needs an ADC + gain stage). Not a mic array/
-beamforming: Oído's engine has no spare compute for that on top of STT
-inference (see the MCU caveats above — it isn't comfortably real-time on
-one core, and two-core is disabled). Audio must be fed through Oído's
-streaming API, not its batch `transcribe` call, which hangs on live
-microphone input per the project's own README.
+**Microphone: single digital MEMS mic (I2S), 16 kHz mono.** Not analog
+electret (noisier, needs an ADC + gain stage). Not a mic array: one
+microphone at push-to-talk distance, and the recogniser on the phone
+takes 16 kHz mono.
 
 **Speaker: small dynamic speaker driven by an I2S DAC/amp (Class D), not a
-piezo buzzer.** A piezo can beep but can't carry intelligible TTS speech.
+piezo buzzer.** A piezo can beep but can't carry intelligible speech.
 
 **Final picks (2026-11-11):**
 - **Microphone:** `ICS-43434` (TDK InvenSense, I2S MEMS) — replaces the
   originally-named INMP441, which DigiKey confirms is obsolete; this is
-  their own listed replacement. 3.50×2.65×0.98 mm SMD package.
+  their own listed replacement. 3.50×2.65×0.98 mm SMD package. At 16 kHz
+  it runs in its low-power mode (6.25–18.75 kHz, 230 µA).
 - **Speaker:** `CDS-20144` (Same Sky/CUI). Correction on shape: not round
   — it's an **oval frame, 20×14×3.2 mm**, 1 W, 4 Ω. The front-face layout
   (grille/port only, driver relocated to the back cavity, see the bug
   fix in the enclosure section) needs to account for this footprint, not
   a round one.
+
+## Audio pipeline — decided (2026-11-24)
+
+```
+Talk held:   mic → I2S 16 kHz/16 bit → IMA ADPCM → BLE notify → phone: STT → text → Hermes
+Reply:       Hermes → text → phone: TTS → 16 kHz → IMA ADPCM → BLE write → decode → I2S → amp → speaker
+```
+
+**One format in both directions: 16 kHz, mono, 16 bit, IMA ADPCM at
+4 bit/sample = 64 kbit/s.** 16 kHz both ways because the microphone and
+the amplifier share one I2S clock pair on the board, and because it is
+the recogniser's native rate. The synthesiser produces 24 kHz; the phone
+resamples before sending.
+
+**Frame:** 244 B = 4 B header (sequence number, ADPCM predictor and step
+index, so every frame decodes on its own and a lost frame costs 30 ms,
+not the rest of the utterance) + 240 B = 480 samples = 30 ms. 33.3
+frames/s, 8.1 kB/s.
+
+**Why ADPCM:**
+
+| Codec                | Bit rate at 16 kHz mono | Cost on the ESP32-S3 (Espressif `esp_audio_codec` table, ESP32-S3R8)                  | Verdict                                                                                                  |
+| -------------------- | ----------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Raw PCM              | 256 kbit/s              | none                                                                                    | 34 % of the best measured link, above the one-packet-per-event floor; four times the radio time          |
+| **IMA ADPCM**        | **64 kbit/s**           | encode 2.69 % CPU at 48 kHz stereo (a sixth of that at 16 kHz mono), 0.01 kB            | **picked** — fits under the floor with 2× margin, a few dozen lines of code each side, no library         |
+| G.722                | 64 kbit/s               | encode 9.74 % CPU, 20.8 kB                                                              | same bit rate as ADPCM for more CPU and RAM                                                              |
+| Opus                 | 16–32 kbit/s            | encode 24.9 % CPU at 48 kHz stereo, complexity 0; 29.4 kB                               | fallback — a third of the radio time, but a library on both sides                                         |
+| LC3                  | 32 kbit/s               | encode 46.57 % CPU at 48 kHz stereo                                                     | heavier than Opus for a higher bit rate                                                                  |
+
+IMA ADPCM at 16 kHz / 16 bit over BLE notifications is what voice remote
+controls already do (TI application report SWRA506). The control
+characteristic carries a codec id so that Opus can replace it without a
+new GATT layout. Two things would trigger that: a measured phone link
+under about 100 kbit/s, or ADPCM noise measurably degrading recognition.
+Neither is measured.
+
+**A few seconds of speech:** 5 s is 40 kB of ADPCM (160 kB raw), sent as
+it is spoken; 30 s is 240 kB.
+
+**Flow, device side:**
+- *Up.* Capture starts at the Talk press into a 3 s buffer (24 kB),
+  drained into notifications as fast as the link takes them. Release
+  sends the remainder, then a talk-stop on the control characteristic.
+- *Down.* The device grants credits (frames it has room for); the phone
+  writes only against credits. Playback starts at 5 buffered frames
+  (150 ms). On an underrun the device plays silence and keeps the stream.
+  A 2 s buffer (16 kB) is enough; nothing requires PSRAM.
+- *Stop* drops both buffers and sends an abort, so the phone stops
+  synthesising and sending.
+- The amplifier's `SD_MODE` goes to a GPIO: shut down (0.6 µA) whenever
+  the device is not speaking. Left high it draws 2.4 mA while the I2S
+  clock runs for the microphone, and 340 µA with the clock stopped.
 
 ## Enclosure — decided (2026-11-09)
 
@@ -211,12 +300,47 @@ the electronics.
 
 ## Companion app architecture & connectivity — decided (2026-11-09)
 
-**The device has no awareness of Hermes at all.** It only talks BLE text to
-the phone: STT output going out, text-to-speak coming in. All Hermes
-connectivity, device configuration, and firmware updates live in the
-companion app, not the firmware. Keeps the device firmware small and
-stable; evolving the integration means updating the app, not reflashing
-the pendant.
+**The device has no awareness of Hermes at all, nor of speech
+recognition or synthesis.** It only exchanges audio frames with the phone
+over BLE: microphone audio going out, reply audio coming in. Speech
+engines, Hermes connectivity, device configuration and firmware updates
+all live in the companion app, not the firmware. Keeps the device
+firmware small and stable; evolving the integration or changing a speech
+engine means updating the app, not reflashing the pendant.
+
+**Speech engines — on the phone, user-chosen (2026-11-24).** The app
+decodes the device's ADPCM to 16 kHz PCM, transcribes it, sends the text
+to Hermes, synthesises the reply and streams it back as ADPCM.
+
+| Role | Engine                                                                 | Licence    | What its own documentation states                                                                                                                                                         |
+| ---- | ---------------------------------------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| STT  | **Whistle** (Cactus Compute), through the `cactus` engine's C API      | Apache-2.0 | 16.9 MB single file, CPU only; English, German, French, Spanish, Italian, Dutch, Polish; input 16 kHz mono; one pass up to 30 s, windowed beyond; Android among the prebuilt targets       |
+| TTS  | **Babylon.cpp** (Mobile Artificial Intelligence), Kokoro engine        | MIT        | C/C++ library on ONNX Runtime, `libbabylon.so` for Android arm64-v8a; Kokoro output 24 kHz; phonemes from Open Phonemizer; `babylon_kokoro_tts` returns a complete WAV, no streaming call |
+
+Requirements on the app that follow from those two columns:
+- **Transcribe on release, not while listening.** Whistle documents no
+  streaming mode. Audio is accumulated as it arrives; because it arrives
+  in real time, transcription starts the moment Talk is released.
+- **Talk hold limit and Whistle's 30 s pass** are the same order: keep the
+  hold limit at 30 s unless windowed transcription is shown to hold up.
+- **Synthesise sentence by sentence.** Babylon returns whole files; the
+  app splits the reply so the first sentence is playing while the next
+  ones are synthesised. Each is resampled 24 → 16 kHz, ADPCM-encoded and
+  sent against the device's credits.
+- **Abort** on the device's Stop: cancel synthesis and stop sending.
+- **Engine choice is a setting in the app.** One engine per role is
+  active, chosen by the user; **no automatic cloud fallback**. The device
+  neither knows nor cares which engine is selected.
+
+Not verified from either project's documentation, to measure on the real
+phone: Whistle's and Kokoro's speed on an Android arm64 CPU (Whistle's
+published timings are on an Apple M4 Pro; Babylon publishes none).
+
+**French through Babylon: confirmed, one voice.** `voices/kokoro/fr-FR-siwis.bin`
+exists in Babylon.cpp's repository (verified 2026-11-24, same commit as
+every other shipped voice). It is the only French voice currently shipped
+— Kokoro's upstream model supports more, so additional French voices may
+follow, but today there is exactly one to pick from.
 
 **Firmware OTA: over BLE**, via a dedicated GATT service that streams
 firmware chunks from the app — no need to bring up Wi-Fi on the chip just
@@ -246,33 +370,33 @@ Whichever mode is chosen, reachability alone (knowing the IP) must never
 be the only barrier — the token is what actually protects the Hermes
 endpoint.
 
-## Licence — decided (2026-11-09)
+## Licence — decided (2026-11-09), firmware open (2026-11-24)
 
 Multi-licence, same pattern as Wizards Towers/turbofat:
-- **ARA firmware (device, includes Oído): GPL-3.0.** Forced by Oído's own
-  licence plus the anti-tivoization clause (GPLv3 §6) — a single
-  monolithic MCU binary means the whole firmware inherits GPL, not just
-  Oído's portion, and the device must allow users to install their own
-  modified firmware (no locked secure boot). Fits Lord's own ethos anyway.
-- **Companion app (Android): MIT.** Not contaminated by the firmware's GPL
-  — app and device only talk over BLE, no linking.
-- **Oído's model weights: kept under their own CC-BY-4.0/CC-BY-SA-4.0**
-  (the `stream` model used for live capture is CC-BY-SA) — cited correctly
-  with a `NOTICE` file, same convention as Wizards Towers' `CREDITS.md`.
+- **ARA firmware (device): not chosen.** Nothing in the firmware forces a
+  licence any more: it contains no speech engine and no model weights,
+  only Lord's own code on ESP-IDF (Apache-2.0). The GPL-3.0 constraint
+  that came with Oído is gone with Oído.
+- **Companion app (Android): MIT.** It links Whistle/`cactus`
+  (Apache-2.0) and Babylon.cpp (MIT), both compatible with MIT; their
+  notices and those of the model files they load go in a `NOTICE` file,
+  same convention as Wizards Towers' `CREDITS.md`.
 - **Lord's own 3D models (shells): CC-BY-SA.** Matches the "people remix
-  it" intent and the CC-BY-SA already inherited from Oído's model weights.
+  it" intent.
 
 ## UX flow / state machine — decided (2026-11-09, timeouts to evolve)
 
 **States:** Off → Standby (clock shown, no BLE) → Connecting (advertising,
 on Power/Connect short-press; numeric-comparison pairing the first time,
 bonding reused after) → Connected/session idle (clock + small connected
-icon, long BLE interval) → Listening (Talk held, mic + streaming STT, BLE
-switches to short interval) → Thinking (Talk released; one unified
-"processing" state covering both Oído's STT tail latency and the
-Hermes round-trip — no need to expose the internal steps to the user) →
-Speaking (reply received, local TTS) → back to Connected/idle. Plus an
-Error/timeout state (Talk pressed with no connection, or no reply in time).
+icon, long BLE interval) → Listening (Talk held, mic audio streamed to
+the phone, BLE switches to short interval) → Thinking (Talk released;
+one unified "processing" state covering the phone's STT, the Hermes
+round-trip and the synthesis of the first sentence — no need to expose
+the internal steps to the user) → Speaking (reply audio arriving from
+the phone and playing) → back to Connected/idle, long BLE interval. Plus
+an Error/timeout state (Talk pressed with no connection, link lost during
+an exchange, or no reply in time).
 
 **Buttons per context:**
 - **Power/Connect:** Standby→Connecting (short); Connected→Off (long);
@@ -281,7 +405,7 @@ Error/timeout state (Talk pressed with no connection, or no reply in time).
   error icon rather than doing nothing silently).
 - **Stop:** interrupts from any active state (Listening/Thinking/Speaking)
   back to Connected/idle — not to Standby, the BLE session stays open.
-  Long press: mute/unmute mic, a persistent state shown by its own icon,
+  It also tells the phone to abort (see *Audio pipeline*). Long press: mute/unmute mic, a persistent state shown by its own icon,
   blocks Talk while active.
 - **Menu:** short = open settings, long = back. Only live from Standby or
   Connected/idle — disabled during Listening/Thinking/Speaking so it can't
@@ -312,7 +436,7 @@ Two distinct, loosely-coupled layers:
 ## Charging & serviceability — decided (2026-11-09)
 
 **Right-to-repair, extended from firmware to hardware.** Same spirit as
-the GPLv3 reflash requirement and the remixable shells: the battery and
+the user-reflashable firmware and the remixable shells: the battery and
 the screen must both be user-replaceable without soldering.
 
 - **Battery:** connector-based, **JST-PH (2.0 mm pitch)** — not JST-SH.
@@ -341,6 +465,65 @@ the screen must both be user-replaceable without soldering.
   the ornate metal look. USB-C remains the universal baseline on every
   shell; Qi is an add-on for whoever wants it on a plastic build.
 
+## Power budget — estimated, not measured (2026-11-24)
+
+Battery current equals 3.3 V rail current: the regulator is linear. The
+amplifier is on the battery directly. Capacity taken at the nominal
+350 mAh, no derating.
+
+**Inputs:**
+
+| Item                                              | Value                         | Source                                                                                  |
+| ------------------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------------- |
+| BLE transmit, 0 dBm                               | 176 mA peak                   | ESP32-S3 datasheet v2.2, table 5-8                                                      |
+| BLE receive                                       | 93 mA peak                    | same                                                                                    |
+| CPU awake at 80 MHz, peripheral clocks on, idle   | 36.1 mA                       | same, table 5-9                                                                         |
+| BLE up, automatic light sleep, main crystal clock | 3.3 mA                        | Espressif, `examples/bluetooth/nimble/power_save`, ESP32-S3; connection parameters not stated |
+| same, external 32.768 kHz crystal                 | 0.23 mA                       | same                                                                                    |
+| 8 MB PSRAM in light sleep                         | +0.14 mA                      | ESP32-S3 datasheet, table 5-10 note                                                     |
+| Microphone at 16 kHz                              | 0.23 mA                       | ICS-43434 datasheet, low-power mode                                                     |
+| Amplifier quiescent / shut down                   | 2.4 mA / 0.6 µA               | MAX98357A datasheet, 3.7 V                                                              |
+| Fuel gauge + regulator quiescent                  | 0.08 mA                       | datasheet typical values                                                                |
+| One 251 B packet on 1M PHY                        | 2.12 ms on air                | Bluetooth packet format                                                                 |
+| Radio open per connection event, no data          | 0.5 ms receive (assumed)      | —                                                                                       |
+| Speech into the speaker at full volume            | 50–150 mW average (assumed)   | 0.93 W maximum, speech 7–12 dB below a full-scale sine; amplifier at 85 %               |
+
+**Per state:**
+
+| State                                   | Radio duty                                   | Current           |
+| --------------------------------------- | -------------------------------------------- | ----------------- |
+| Connected, idle                         | —                                            | 3.5 mA            |
+| Listening (ADPCM up, 33.3 packets/s)    | transmit 7.1 %, receive 3.3 %                | 48 mA             |
+| Thinking (15 ms interval, no data)      | receive 3.3 %                                | 9 mA              |
+| Speaking (ADPCM down), electronics      | receive 10.4 %, transmit 0.5 %               | 43 mA             |
+| Speaking, with amplifier and speaker    | same                                         | 61–93 mA          |
+
+**Battery life:**
+
+| Profile                                                                 | Average current | 350 mAh lasts |
+| ----------------------------------------------------------------------- | --------------- | ------------- |
+| Connected, idle                                                         | 3.5 mA          | 4.1 days      |
+| Connected, 1–2 exchanges per hour                                       | 3.8–4.1 mA      | 3.6–3.8 days  |
+| Exchanges back to back                                                  | 53 mA           | 6.6 hours     |
+
+One exchange = 5 s listening, 5 s thinking, 10 s speaking at 100 mW =
+0.29 mAh.
+
+**What the move to the phone changes.** Active use: the budget recorded
+with the on-device recogniser was "~2 h continuous", which is 175 mA
+average; streaming audio instead is 53 mA, radio included. Connected
+idle: unchanged by the move — no recogniser ran while idle. The 3.5 mA
+here is higher than the 2.4 mA behind the earlier "~6 d" because it
+starts from Espressif's measured 3.3 mA for an ESP32-S3 that keeps its
+main crystal running as the BLE sleep clock, which is what this board
+does: it has no 32.768 kHz crystal. Standby (no BLE) is not in this
+table and is not affected.
+
+**Open, not part of the move:** a 32.768 kHz crystal on IO15/IO16 (free
+in the floorplan's net table) brings Espressif's figure from 3.3 mA to
+0.23 mA; connected-idle would become about 0.45 mA, about 32 days. Not on
+the BOM. To decide with the schematic.
+
 ## Components — final BOM, fixed (2026-11-11)
 
 Every part below is a confirmed, sourceable reference, not a placeholder —
@@ -349,11 +532,11 @@ footprints instead of guessed boxes.
 
 | Part                    | Ref                                                                                    | Footprint                                                                      | Notes                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | ----------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| MCU module              | `ESP32-S3-WROOM-1-N16R8`                                                               | 18 × 25.5 × 3.1 mm                                                             | PCB antenna variant (not `-1U`). LCSC C2913202 / DigiKey 5407-ESP32-S3-WROOM-1-N16R8CT-ND — both at zero stock on 2026-11-21.                                                                                                                                                                                                                                                                                                   |
+| MCU module              | `ESP32-S3-WROOM-1-N16R8`                                                               | 18 × 25.5 × 3.1 mm                                                             | PCB antenna variant (not `-1U`). More flash and PSRAM than the firmware needs; any `ESP32-S3-WROOM-1` with 4 MB or more fits the same pads (see *MCU*). LCSC C2913202 / DigiKey 5407-ESP32-S3-WROOM-1-N16R8CT-ND — both at zero stock on 2026-11-21; Mouser 356-ESP32S3WRM1N16R8 in stock that day.                                                                                                                                                                                                                                                                                                   |
 | Display                 | `GDEY0213B74` (Good Display)                                                           | outline 59.2×29.2×1.0 mm, active 48.55×23.7 mm                                 | Rectangular, 250×122, SSD1680Z, 4 grayscale, SPI, 24-pin FPC. No touch/front-light. Bought from Good Display's own shop (buy-lcd.com); not at LCSC. From its drawing: active area 2.70 mm from the top (non-FPC) end and 7.95 mm from the FPC end, centred across; tail 12.5 mm wide, 14.3 mm long, 0.3 mm thick.                                                                                                               |
 | Microphone              | `ICS-43434` (TDK InvenSense)                                                           | 3.50×2.65×0.98 mm                                                              | I2S MEMS. DigiKey 1428-1066-1-ND. DigiKey now marks it obsolete too (2026-11-21), with 52 007 in stock: buy the prototype's from that stock; a successor is an open point for any later batch.                                                                                                                                                                                                                                  |
 | Speaker                 | `CDS-20144` (Same Sky/CUI)                                                             | oval 20×14×3.2 mm                                                              | 1 W, 4 Ω, solder pads. Driver lives in the back cavity; front face carries only a small acoustic port (bug found/fixed 2026-11-11, previous round-pocket placeholder overflowed the shell wall). DigiKey 102-3542-ND.                                                                                                                                                                                                           |
-| Battery                 | `LP702030` / EEMB 350 mAh                                                              | 30 × 20 × 7 mm nominal, JST-PH (2.0 mm)                                        | 3.7 V Li-Po. Amazon (10.99€, ASIN B095W1XHVY). The listing reportedly gives 7.3 × 20.5 × 32 mm overall — to measure; the case reserves 2 mm at the lead end. Est. life: ~6 d connected-idle, ~4-5 d at 1-2 uses/h, ~2 h continuous non-stop use — estimated from the power budget, not measured.                                                                                                                                |
+| Battery                 | `LP702030` / EEMB 350 mAh                                                              | 30 × 20 × 7 mm nominal, JST-PH (2.0 mm)                                        | 3.7 V Li-Po. Amazon (10.99€, ASIN B095W1XHVY). The listing reportedly gives 7.3 × 20.5 × 32 mm overall — to measure; the case reserves 2 mm at the lead end. Est. life: ~4 d connected-idle, ~3.7 d at 1-2 uses/h, ~6.5 h of non-stop exchanges — from the *Power budget* section, not measured.                                                                                                                                |
 | Charge IC               | `TP4056`                                                                               | SOIC-8                                                                         | LCSC C382139 (0.11€/unit at qty 5).                                                                                                                                                                                                                                                                                                                                                                                             |
 | Fuel gauge              | `MAX17048G+T10`                                                                        | TDFN-8, 2 × 2 mm                                                               | LCSC C2682616 / DigiKey MAX17048G+T10CT-ND.                                                                                                                                                                                                                                                                                                                                                                                     |
 | USB-C receptacle        | `SHOU HAN TYPE-C 6P(073)`, LCSC C668623                                                | 8.94×3.2 mm shell, 6.8 mm deep (7.15 overall), 6-pin (VBUS×2, GND×2, CC1, CC2) | Charge-only, no D+/D- (decided 2026-11-11) — firmware OTA is BLE, so the port never needs data lines. Rated 5V/3A. **Changed (2026-11-21) from `TYPE-C 6P CB1.6(073)`, C2858274:** that one is the sunk-board version of the same shell, 1.6 mm into a board cut-out; on the 1.0 mm board it comes out 0.6 mm on the display side, where there is 0.4 mm. The plain `(073)` sits on the board. On the device's right long wall. |

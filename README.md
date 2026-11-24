@@ -26,18 +26,20 @@ The mechanical shell and the PCB are past placeholder stage: a fixed component B
 
 ## Architecture (decided)
 
-Voice never travels over BLE.
+The device is a BLE audio terminal; speech recognition and synthesis run on the phone.
 
-1. The device runs STT locally (captured speech → text), via `lokutor-ai/oido`.
-2. The text is sent over BLE to a relay: the companion app on Lord's Android phone, not a fixed hub — it has to travel with him for the "real remote access" requirement below.
-3. The relay forwards the text to Hermes/PC, by default over an embedded Tailscale/Headscale tunnel (`tsnet`); direct connection and plain LAN are user-selectable alternatives, not hard-wired to Lord's own setup.
-4. The reply comes back the same way, read aloud by a local TTS (eSpeak-ng/Flite) on the device.
+1. While Talk is held, the device streams microphone audio (16 kHz, IMA ADPCM, 64 kbit/s) over BLE to a relay: the companion app on Lord's Android phone, not a fixed hub — it has to travel with him for the "real remote access" requirement below.
+2. The app transcribes it on the phone (Whistle) and forwards the text to Hermes/PC, by default over an embedded Tailscale/Headscale tunnel (`tsnet`); direct connection and plain LAN are user-selectable alternatives, not hard-wired to Lord's own setup.
+3. The reply text comes back the same way; the app synthesises it on the phone (Babylon.cpp/Kokoro) and streams the audio back over BLE.
+4. The device plays it through its amplifier and speaker.
 
-Topology: `device --BLE--> companion app --tsnet/direct/LAN--> PC/Hermes`.
+The speech engines are a setting in the app, with no automatic cloud fallback.
+
+Topology: `device --BLE audio--> companion app --text over tsnet/direct/LAN--> PC/Hermes`.
 No direct device-to-PC BLE link.
 Intended use: real remote access, not just the local network.
 
-The device has no awareness of Hermes at all — connectivity, configuration and firmware OTA (over BLE) all live in the companion app, never in the device firmware.
+The device has no awareness of Hermes or of any speech engine — connectivity, configuration and firmware OTA (over BLE) all live in the companion app, never in the device firmware.
 
 ## Hardware — fixed BOM
 
@@ -66,14 +68,13 @@ Full table, footprints and sourcing notes: `docs/DESIGN.md#components`.
 - **PCB antenna clearance**: best case ~13.8 mm against a 15 mm Espressif target on a 60 mm shell. Geometry alone can't close this; needs a real prototype range test.
 - **E-Ink screen mounting**: FPC ribbon routing, bend radius and a non-damaging retention method aren't finalised; the current shell isn't sealed against water/dust.
 - **Battery/screen access split**: the shell doesn't yet decide whether it opens in one piece or splits front/back for independent battery and screen replacement.
-- **Firmware and companion app**: neither has a single line of code yet. STT (Oído) is not real-time on one core (~8.7 s for a 4 s utterance); the UX "Thinking" state exists on paper, not in practice.
+- **Firmware and companion app**: neither has a single line of code yet. BLE audio throughput against a real Android phone, Whistle's and Kokoro's speed on the phone, and French through Babylon.cpp are not measured.
 - UX timeouts (connect ~30 s, session inactivity, max Talk hold ~30-60 s) are starting values, expected to move once there's a real device to test against.
 
 ## Licence
 
 Multi-licence, same pattern as Wizards Towers/turbofat. Full rationale: `docs/DESIGN.md#licence--decided-2026-11-09`.
 
-- **Device firmware (includes Oído): GPL-3.0** — forced by Oído's own licence and GPLv3's anti-tivoization clause; the device must allow users to flash their own modified firmware.
-- **Companion app (Android): MIT** — not contaminated by the firmware's GPL, since device and app only ever talk over BLE.
-- **Oído's model weights: CC-BY-4.0 / CC-BY-SA-4.0**, cited in a `NOTICE` file.
+- **Device firmware: not chosen** — it no longer contains a speech engine, so nothing forces a licence on it.
+- **Companion app (Android): MIT** — links Whistle (Apache-2.0) and Babylon.cpp (MIT), cited in a `NOTICE` file.
 - **Lord's own 3D models (shells): CC-BY-SA**, matching the "people remix it" intent.

@@ -87,9 +87,11 @@ until there is a schematic** (`models/pcb/README.md`, Blocking 1). All
 
 1. **The module is out of stock at both distributors** (LCSC C2913202:
    0; DigiKey 5407-ESP32-S3-WROOM-1-N16R8CT-ND: 0, 650 on back order,
-   8 weeks quoted, $6.76). Order it on back order from either, or from
-   another distributor; the part number must stay exactly `-N16R8` (not
-   `-1U`, not `N8R8`).
+   8 weeks quoted, $6.76). Mouser had it in stock on 2026-11-21
+   (356-ESP32S3WRM1N16R8). `-N16R8` is the reference, not a requirement:
+   any `ESP32-S3-WROOM-1` with 4 MB of flash or more, PSRAM or not, fits
+   the same pads and the firmware (`docs/DESIGN.md`, *MCU*). Not `-1U`:
+   that one has no PCB antenna and a different outline.
 2. **Battery: measure before plugging.** The Amazon page itself could not
    be opened; its search result gives 7.3 × 20.5 × 32 mm, "with JST
    connector" and built-in protection, and EEMB's own page gives the same
